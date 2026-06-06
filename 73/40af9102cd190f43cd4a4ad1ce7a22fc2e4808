@@ -1,0 +1,19 @@
+LICENSE
+  s_6f1f5d1b1aa25f::t_96910539e365d3 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "7340af9102cd190f43cd4a4ad1ce7a22fc2e4808",
+  "prompts": {},
+  "sessions": {
+    "s_6f1f5d1b1aa25f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "99d929c7-302a-4dda-a751-f3bc9539c792",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
