@@ -1,0 +1,23 @@
+.github/actions/setup-takumi-guard/action.yml
+  s_dbd8b80e5d8ab2::t_34e7dfa72dddcd 1-8
+.github/workflows/claude.yml
+  s_dbd8b80e5d8ab2::t_b844dc9b764040 1-43
+.github/workflows/claude-code-review.yml
+  s_dbd8b80e5d8ab2::t_56e8063571abc6 1-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "f3573005580d018df2262a986a9d2dd51c691b75",
+  "prompts": {},
+  "sessions": {
+    "s_dbd8b80e5d8ab2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ae6961d6-20c0-44b5-987e-fc3b6958d7b2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
