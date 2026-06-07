@@ -1,0 +1,21 @@
+.markdownlint.json
+  s_dbd8b80e5d8ab2::t_2f296e125a7e78 1-8
+.gitignore
+  s_dbd8b80e5d8ab2::t_a2b112198804e5 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "faa894b1c9611950c8a6d26509a2b5b7a1b34449",
+  "prompts": {},
+  "sessions": {
+    "s_dbd8b80e5d8ab2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ae6961d6-20c0-44b5-987e-fc3b6958d7b2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
