@@ -1,0 +1,21 @@
+jp-diet-minutes/references/response-format.md
+  s_8eedc9b836787d::t_eb7ed9f3707a70 275
+  s_8eedc9b836787d::t_5e6c41e00842bd 1-274,276-282,284-312
+  s_8eedc9b836787d::t_8015d08ea1cd4d 283
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "4213bcde7430551d447d9e5cb1f1298a57f2fa54",
+  "prompts": {},
+  "sessions": {
+    "s_8eedc9b836787d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "87cc0611-cda2-4504-b4f4-3557063e53c4",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
