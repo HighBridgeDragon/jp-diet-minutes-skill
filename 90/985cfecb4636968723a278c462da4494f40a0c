@@ -1,0 +1,19 @@
+jp-diet-minutes/references/parameters.md
+  s_8eedc9b836787d::t_1423edc9e57646 1-199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "90985cfecb4636968723a278c462da4494f40a0c",
+  "prompts": {},
+  "sessions": {
+    "s_8eedc9b836787d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "87cc0611-cda2-4504-b4f4-3557063e53c4",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
