@@ -1,0 +1,19 @@
+.github/workflows/markdown-lint.yml
+  s_dbd8b80e5d8ab2::t_329faa4c3adc9a 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "e99b1fb464d0864785a45bd8a03559106ae03e47",
+  "prompts": {},
+  "sessions": {
+    "s_dbd8b80e5d8ab2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ae6961d6-20c0-44b5-987e-fc3b6958d7b2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
