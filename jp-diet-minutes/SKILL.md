@@ -62,14 +62,14 @@ NDL（国立国会図書館）の国会会議録検索システム API 経由で
 # 議員名で発言抽出(部分一致 OR)
 GET https://kokkai.ndl.go.jp/api/speech?speaker=岸田文雄&from=2024-01-01&until=2024-12-31&maximumRecords=100&recordPacking=json
 
-# キーワード AND 検索
-GET https://kokkai.ndl.go.jp/api/speech?any=マイナンバー 個人情報&nameOfHouse=参議院&recordPacking=json
+# キーワード AND 検索(空白区切りは `+` または `%20` でエンコード)
+GET https://kokkai.ndl.go.jp/api/speech?any=マイナンバー+個人情報&nameOfHouse=参議院&recordPacking=json
 
 # 会派指定(正式名称のみ)
 GET https://kokkai.ndl.go.jp/api/speech?speakerGroup=自由民主党&from=2024-01-01&recordPacking=json
 ```
 
-主要パラメータ: `speaker`（発言者・OR 部分一致）, `any`（全文・AND 部分一致）, `speakerGroup`（会派・部分一致）, `from`/`until`（YYYY-MM-DD 範囲）, `nameOfHouse`（列挙: 衆議院/参議院/両院/両院協議会）, `maximumRecords`（1〜100、既定 30）。
+主要パラメータ: `speaker`（発言者・OR 部分一致）, `any`（全文・AND 部分一致）, `speakerGroup`（会派・部分一致 ※DB 上は正式名称で格納されているため、部分一致でも略称ではヒットしない）, `from`/`until`（YYYY-MM-DD 範囲）, `nameOfHouse`（列挙: 衆議院/参議院/両院/両院協議会）, `maximumRecords`（1〜100、既定 30）。
 
 レスポンスは `speechRecord[]` 配列。各要素に会議メタ（`issueID`, `session`, `nameOfHouse`, `nameOfMeeting`, `date` 等）がフラット展開されている。
 
@@ -115,7 +115,7 @@ GET https://kokkai.ndl.go.jp/api/meeting?issueID=121405254X00220241004&recordPac
 レスポンス取得後、以下の点に注意:
 
 1. **`speechOrder = 0` は会議録情報ヘッダ**: 議事日程・付議案件などの構造情報で、実発言ではない。`speaker` は固定で `会議録情報`。発言集計時は `speechOrder > 0` でフィルタする
-2. **`imageKind` の値**: 既定では `会議録` のほかに `目次` / `索引` / `附録` / `追録` も混入する。発言抽出時は `imageKind === "会議録"` でフィルタ、または `contentsAndIndex=false` / `supplementAndAppendix=false`（既定）を明示
+2. **`imageKind` の値**: 既定では `会議録` のほかに `目次` / `索引` / `附録` / `追録` も混入する。発言抽出時は `imageKind` の値が `会議録` の行のみに絞り込む（リクエストパラメータ `contentsAndIndex` / `supplementAndAppendix` はいずれも既定 `false` のため通常は省略可。明示的に混入させたい場合のみ `true` を指定する）
 3. **`closing` は `false` ではなく `null` を返す**: 閉会中フラグが立っていない通常会議では `null`。`closing === true` で判定推奨
 4. **`nameOfHouse` の不正値は silently 無視される**: HTTP 200 でフィルタ未適用の結果が返る。意図が反映されているか `numberOfRecords` の妥当性で確認すること
 5. **発言本文の改行は CRLF (`\r\n`)**: LF のみではない。テキスト処理時は正規化が必要な場合あり
