@@ -1,6 +1,6 @@
 ---
 name: jp-diet-minutes
-description: Search and retrieve Japanese National Diet (国会) meeting minutes via the official NDL Kokkai API (no auth required). Covers all post-WWII Diet sessions, supports keyword search, speaker lookup, meeting-level retrieval, and date/session/issue filtering. Useful for political research, legislative tracking, speech analysis, and any task involving Japanese parliamentary records. 戦後の日本の国会議事録を NDL 国会会議録検索システム API 経由で検索・取得するスキル。発言・会議・キーワード検索および期間/回次/会派による絞り込みに対応。Use this skill when researching Japanese Diet debates, MP statements, or parliamentary records.
+description: Search and retrieve Japanese National Diet (国会) meeting minutes via the official NDL Kokkai API (no auth required). Covers all Diet sessions since 1947, supports keyword search, speaker lookup, meeting-level retrieval, and date/session/issue filtering. Useful for political research, legislative tracking, speech analysis, and any task involving Japanese parliamentary records. 国会発足（1947 年）以降の日本の国会議事録を NDL 国会会議録検索システム API 経由で検索・取得するスキル。発言・会議・キーワード検索および期間/回次/会派による絞り込みに対応。Use this skill when researching Japanese Diet debates, MP statements, or parliamentary records.
 license: MIT
 metadata:
   version: "0.1.0"
@@ -8,9 +8,9 @@ metadata:
 
 # 国会会議録検索スキル
 
-NDL（国立国会図書館）の国会会議録検索システム API 経由で戦後の日本の国会議事録を調査する。認証不要。HTTPS GET でアクセス可能なフェッチツール（`mcp-server-fetch`, Claude Code の `WebFetch`, 他の MCP 対応 fetch ツール）が 1 つあれば動作する。
+NDL（国立国会図書館）の国会会議録検索システム API 経由で国会発足（1947 年）以降の日本の国会議事録を調査する。認証不要。HTTPS GET でアクセス可能なフェッチツール（`mcp-server-fetch`, Claude Code の `WebFetch`, 他の MCP 対応 fetch ツール）が 1 つあれば動作する。
 
-帝国議会会議録（戦前）は別 API のため対象外。
+帝国議会会議録（〜1947 年）は別 API のため対象外。
 
 ## 基本ルール
 
