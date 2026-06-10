@@ -114,9 +114,9 @@ GET https://kokkai.ndl.go.jp/api/meeting?issueID=121405254X00220241004&recordPac
 
 レスポンス取得後、以下の点に注意:
 
-1. **`speechOrder = 0` は会議録情報ヘッダ**: 議事日程・付議案件などの構造情報で、実発言ではない。`speaker` は固定で `会議録情報`。発言集計時は `speechOrder > 0` でフィルタする
+1. **`speechOrder` が `0` の行は会議録情報ヘッダ**: 議事日程・付議案件などの構造情報で、実発言ではない。`speaker` は固定で `会議録情報`。発言集計時は `speechOrder` が `0` の行を除外する
 2. **`imageKind` の値**: 既定では `会議録` のほかに `目次` / `索引` / `附録` / `追録` も混入する。発言抽出時は `imageKind` の値が `会議録` の行のみに絞り込む（リクエストパラメータ `contentsAndIndex` / `supplementAndAppendix` はいずれも既定 `false` のため通常は省略可。明示的に混入させたい場合のみ `true` を指定する）
-3. **`closing` は `false` ではなく `null` を返す**: 閉会中フラグが立っていない通常会議では `null`。`closing === true` で判定推奨
+3. **`closing` は `false` ではなく `null` を返す**: 閉会中フラグが立っていない通常会議では `null`。閉会中審査の判定は `closing` の値が `true` の場合のみで行う（`false` との比較ではなく `true` との比較を使うこと）
 4. **`nameOfHouse` の不正値は silently 無視される**: HTTP 200 でフィルタ未適用の結果が返る。意図が反映されているか `numberOfRecords` の妥当性で確認すること
 5. **発言本文の改行は CRLF (`\r\n`)**: LF のみではない。テキスト処理時は正規化が必要な場合あり
 6. **`speech` のレスポンス構造はフラット**: `meeting` のような `meetingRecord` ラッパは持たない。共通パーサを書くなら分岐が必要
