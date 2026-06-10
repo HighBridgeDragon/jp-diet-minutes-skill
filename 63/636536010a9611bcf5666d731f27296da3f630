@@ -1,0 +1,27 @@
+jp-diet-minutes/SKILL.md
+  s_e5266777e55620::t_9f7e4995e52a23 13
+  s_e5266777e55620::t_ac37ac4d399929 11
+  s_e5266777e55620::t_f5a6e20153e6e8 3
+README.md
+  s_e5266777e55620::t_6a355354dbbd44 75
+  s_e5266777e55620::t_fa0ea74da417be 78
+  s_e5266777e55620::t_55a93deed38680 7
+jp-diet-minutes/references/api-reference.md
+  s_e5266777e55620::t_6f345a570fe033 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "63636536010a9611bcf5666d731f27296da3f630",
+  "prompts": {},
+  "sessions": {
+    "s_e5266777e55620": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "20e4d889-16dc-49ac-ba18-818b5ea0dea3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
