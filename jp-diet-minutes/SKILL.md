@@ -163,7 +163,7 @@ GET https://kokkai.ndl.go.jp/api/meeting?issueID=<上記で取得した21桁ID>&
 
 - レスポンスの `nextRecordPosition` を次回リクエストの `startRecord` に渡す
 - 最終ページの判定:
-  - JSON: `nextRecordPosition === null`
+  - JSON: `nextRecordPosition` の値が `null`
   - XML: `<nextRecordPosition>` 要素自体が欠落
 - 連続取得時は数秒間隔を空ける（レート制限）
 
