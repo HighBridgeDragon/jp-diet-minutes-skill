@@ -1,0 +1,28 @@
+jp-diet-minutes/SKILL.md
+  s_bf2f422c2df43c::t_f5fc26f52bc984 54,58-65,67,69,71-73,76,78,80,82-85,87,89,91-95,98,100,102,104,106-108,111,113
+  s_bf2f422c2df43c::t_f9b2bf47ab1311 18
+  s_bf2f422c2df43c::t_c22e2c6f369aca 6,44,70,90,112
+  s_bf2f422c2df43c::t_eebc8059567abd 26,29-30,32-34,36-38,40-42,45-47,50
+  s_bf2f422c2df43c::t_ce98947dc4cbff 117,119-122
+  s_bf2f422c2df43c::t_9983cbece745f2 133-136
+  s_bf2f422c2df43c::t_1dbec3465453f9 142-143,148-149,154-158,163-164,169-171,174
+  s_bf2f422c2df43c::t_863aa6cd983ec9 11
+  s_bf2f422c2df43c::t_08e1ac026e8a51 209-226,232
+  s_bf2f422c2df43c::t_9f618bc93721eb 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "c6a42118d181d5039b7a2ebc8b10e7343dd4afaa",
+  "prompts": {},
+  "sessions": {
+    "s_bf2f422c2df43c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a21de8e-681c-4600-bdbb-c3a4f20b8edc",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
