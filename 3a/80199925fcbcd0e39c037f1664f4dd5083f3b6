@@ -1,0 +1,19 @@
+jp-diet-minutes/scripts/search-by-speaker.sh
+  s_bf2f422c2df43c::t_b03550e10f1f3d 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "3a80199925fcbcd0e39c037f1664f4dd5083f3b6",
+  "prompts": {},
+  "sessions": {
+    "s_bf2f422c2df43c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a21de8e-681c-4600-bdbb-c3a4f20b8edc",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
