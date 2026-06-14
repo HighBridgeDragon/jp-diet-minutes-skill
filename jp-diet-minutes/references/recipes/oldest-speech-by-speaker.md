@@ -1,5 +1,5 @@
 ---
-name: 議員の特定期間における最古発言の特定
+name: oldest-speech-by-speaker
 description: API の降順固定下で from/until を狭めて最古発言を探すレシピ
 ---
 
