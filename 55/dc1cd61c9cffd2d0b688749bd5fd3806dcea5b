@@ -1,0 +1,22 @@
+docs/specs/2026-06-14-wrapper-scripts-design.md
+  s_bf2f422c2df43c::t_d2f29ac18fb44f 133-146
+  s_bf2f422c2df43c::t_3cb21b025f4910 150-159
+  s_bf2f422c2df43c::t_cb673edfb95a62 1-103,105,116-132,147-149,160-246
+  s_bf2f422c2df43c::t_86c77f8e3e5ca4 104,106-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "55dc1cd61c9cffd2d0b688749bd5fd3806dcea5b",
+  "prompts": {},
+  "sessions": {
+    "s_bf2f422c2df43c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a21de8e-681c-4600-bdbb-c3a4f20b8edc",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
