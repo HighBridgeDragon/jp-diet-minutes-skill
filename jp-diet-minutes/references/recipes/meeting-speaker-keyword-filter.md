@@ -1,5 +1,5 @@
 ---
-name: 会議内の議員 × キーワード絞り込み
+name: meeting-speaker-keyword-filter
 description: 特定会議の speechRecord[] を議員名と発言本文キーワードでクライアント側絞り込みするレシピ
 ---
 

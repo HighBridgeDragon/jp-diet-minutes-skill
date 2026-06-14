@@ -1,5 +1,5 @@
 ---
-name: Kokkai (National Diet) Minutes Recipes Index
+name: kokkai-minutes-recipes-index
 description: 国会会議録検索システム API V2 wrapper scripts では covers できない複合パターンのスニペット集（索引）
 ---
 

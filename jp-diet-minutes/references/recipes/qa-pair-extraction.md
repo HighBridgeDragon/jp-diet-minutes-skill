@@ -1,5 +1,5 @@
 ---
-name: 同一会議内の質問者 → 答弁者ペア抽出
+name: qa-pair-extraction
 description: meeting 全文の speechRecord[] から speakerPosition を識別子に Q&A ペアを抽出するレシピ
 ---
 
