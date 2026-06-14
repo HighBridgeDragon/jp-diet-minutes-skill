@@ -1,0 +1,23 @@
+jp-diet-minutes/references/recipes.md
+  s_bf2f422c2df43c::t_6053d215344880 70
+  s_bf2f422c2df43c::t_7202a3da8bd138 48,52
+  s_bf2f422c2df43c::t_74a084e2e01a65 79,83
+  s_bf2f422c2df43c::t_a7f0ae3380c065 103
+  s_bf2f422c2df43c::t_8eb91ccd1c2791 1-47,49-51,53-69,71-78,80-82,84-102,104-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "1b1dfad3928697e1e3ed6c3528a66439ea3097e6",
+  "prompts": {},
+  "sessions": {
+    "s_bf2f422c2df43c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a21de8e-681c-4600-bdbb-c3a4f20b8edc",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
