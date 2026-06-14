@@ -11,6 +11,14 @@ XML が既定形式（`recordPacking` 省略時）だが、本ドキュメント
 
 ---
 
+## 注意: フェッチツール選定
+
+`WebFetch` 等の内部要約モデルを介在させるツールで API を呼ぶと、レスポンスに存在しないフィールド（`summary` / `sampleSpeeches` / `notableSpeechCharacteristics` 等）が hallucination として混入する事象が観測されている。生データ取得は必ず `bash scripts/<script>.sh`、または同等の生 HTTP 呼び出し（`curl` / `Invoke-RestMethod`）を用いること。
+
+txt ページ（`https://kokkai.ndl.go.jp/txt/<issueID>/<speechOrder>`）は SPA（Single Page Application）であり、静的 HTML には本文がない（`<div id=app></div>` のみ）。発言全文取得は必ず API 経由で行い、txt URL はユーザー提示用の引用リンクとしてのみ使用すること。
+
+---
+
 ## 共通メタ要素
 
 全エンドポイントのレスポンス直下に出現する。
