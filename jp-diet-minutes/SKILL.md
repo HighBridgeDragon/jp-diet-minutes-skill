@@ -3,112 +3,123 @@ name: jp-diet-minutes
 description: Search and retrieve Japanese National Diet (国会) meeting minutes via the official NDL Kokkai API (no auth required). Covers all Diet sessions since 1947, supports keyword search, speaker lookup, meeting-level retrieval, and date/session/issue filtering. Useful for political research, legislative tracking, speech analysis, and any task involving Japanese parliamentary records. 国会発足（1947 年）以降の日本の国会議事録を NDL 国会会議録検索システム API 経由で検索・取得するスキル。発言・会議・キーワード検索および期間/回次/会派による絞り込みに対応。Use this skill when researching Japanese Diet debates, MP statements, or parliamentary records.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # 国会会議録検索スキル
 
-NDL（国立国会図書館）の国会会議録検索システム API 経由で国会発足（1947 年）以降の日本の国会議事録を調査する。認証不要。HTTPS GET でアクセス可能なフェッチツール（`mcp-server-fetch`, Claude Code の `WebFetch`, 他の MCP 対応 fetch ツール）が 1 つあれば動作する。
+NDL（国立国会図書館）の国会会議録検索システム API 経由で国会発足（1947 年）以降の日本の国会議事録を調査する。認証不要。`bash scripts/<script>.sh` wrapper を使って呼び出す。
 
 帝国議会会議録（〜1947 年）は別 API のため対象外。
 
 ## 基本ルール
 
 - Base URL: `https://kokkai.ndl.go.jp/api/`
-- レスポンス形式: クエリパラメータ `recordPacking=json` 推奨（既定は XML）
+- レスポンス形式: `recordPacking=json`（wrapper script が常に強制）
 - 認証: 不要
-- 呼び出し方法: フェッチツールで URL を直接 GET（クエリ文字列で日本語可、自動 URL エンコード）
+- 呼び出し方法: `bash scripts/<script>.sh` を使う。`WebFetch` / `Invoke-RestMethod` 等の直接利用は、wrapper が covers しない corner case（後述「raw curl が必要なケース」参照）のみ
 - レート制限: 公式に「機械的アクセス時は多重リクエスト禁止、数秒間隔を空ける」と明記。並列化禁止、連続呼び出しは 2〜3 秒間隔目安
 - クエリ全長 2,000 バイト上限（日本語は URL エンコードで 1 文字 9 バイト換算）
 
 ## エンドポイント選択
 
-ユーザーの要求に応じて適切なエンドポイントを選ぶ。**情報量と消費トークンは `meeting_list` < `speech` < `meeting` の順で増える** ため、軽い方から段階的に絞ること。
+ユーザーの要求に応じて適切な wrapper script を選ぶ。**情報量と消費トークンは `list-meetings.sh` < `search-by-*.sh` < `fetch-meeting.sh` の順で増える** ため、軽い方から段階的に絞ること。
 
 ```text
-「○○議員の発言を見せて」「△△に関する発言を探して」
-  → GET https://kokkai.ndl.go.jp/api/speech?speaker=○○&recordPacking=json
-  → GET https://kokkai.ndl.go.jp/api/speech?any=△△&recordPacking=json
-  ※ speech は発言単位。会議メタも各 record にフラット展開される
+「○○議員の発言を見せて」
+  → bash scripts/search-by-speaker.sh ○○ [from] [until] [limit]
 
-「○○委員会の会議一覧を見せて」「YYYY 年の本会議を一覧で」
-  → GET https://kokkai.ndl.go.jp/api/meeting_list?nameOfMeeting=○○&recordPacking=json
-  → GET https://kokkai.ndl.go.jp/api/meeting_list?from=YYYY-01-01&until=YYYY-12-31&recordPacking=json
-  ※ 軽量。会議メタのみ返却(発言本文は含まない)
+「△△に関する発言を探して」
+  → bash scripts/search-by-keyword.sh △△ [from] [until] [limit]
+  ※ any 検索（AND）。複数キーワードは半角スペース区切り
+
+「参考人質疑（証人喚問・公述人含む）を抽出」
+  → bash scripts/search-by-role.sh 参考人 [from] [until] [limit]
+  ※ role は 証人 / 参考人 / 公述人 のいずれか
+
+「○○委員会の会議一覧を見せて」
+  → bash scripts/list-meetings.sh ○○ [from] [until] [limit]
+  ※ 軽量。会議メタのみ返却（発言本文は含まない）
 
 「特定の会議の全発言を見せて」「○○委員会 YYYY-MM-DD の議事録全文」
-  → Step 1: meeting_list で対象会議の issueID を特定
-  → Step 2: GET https://kokkai.ndl.go.jp/api/meeting?issueID=<21桁ID>&recordPacking=json
-  ※ meeting は 1 リクエストで会議全文が返るため大きい。必ず絞ってから呼ぶ
-
-「議案ごとの審議経過を追って」「△△法案の質疑を時系列で」
-  → GET https://kokkai.ndl.go.jp/api/speech?any=△△法案&from=YYYY-MM-DD&recordPacking=json
-  ※ any は AND 検索(スペース区切り複数語は全て含む条件)
-
-「○○会派の議員の発言を抽出」
-  → GET https://kokkai.ndl.go.jp/api/speech?speakerGroup=○○&recordPacking=json
-  ※ speakerGroup は正式名称のみ(略称ヒットしない。例: 自由民主党 ✅ / 自民党 ❌)
+  → Step 1: bash scripts/list-meetings.sh で対象会議の issueID を特定
+  → Step 2: bash scripts/fetch-meeting.sh <issueID>
+  ※ 1 リクエストで会議全文が返るため大きい。必ず絞ってから呼ぶ
 ```
 
-詳細は [api-reference.md](references/api-reference.md), [parameters.md](references/parameters.md), [response-format.md](references/response-format.md) を参照。
+詳細は [api-reference.md](references/api-reference.md), [parameters.md](references/parameters.md), [response-format.md](references/response-format.md), [recipes.md](references/recipes.md) を参照。
 
 ## 各エンドポイントの使い方
 
-### 1. `speech` — 発言単位検索（最頻用）
+### 1. `search-by-speaker.sh` — 議員名で発言検索（最頻用）
 
 検索条件にヒットした発言のみ返す。トークン効率が最も良い。
 
-```text
-# 議員名で発言抽出(部分一致 OR)
-GET https://kokkai.ndl.go.jp/api/speech?speaker=岸田文雄&from=2024-01-01&until=2024-12-31&maximumRecords=100&recordPacking=json
-
-# キーワード AND 検索(空白区切りは `+` または `%20` でエンコード)
-GET https://kokkai.ndl.go.jp/api/speech?any=マイナンバー+個人情報&nameOfHouse=参議院&recordPacking=json
-
-# 会派指定(正式名称のみ)
-GET https://kokkai.ndl.go.jp/api/speech?speakerGroup=自由民主党&from=2024-01-01&recordPacking=json
+```bash
+# 議員名で発言抽出（部分一致 OR）
+bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 100
 ```
 
-主要パラメータ: `speaker`（発言者・OR 部分一致）, `any`（全文・AND 部分一致）, `speakerGroup`（会派・部分一致 ※DB 上は正式名称で格納されているため、部分一致でも略称ではヒットしない）, `from`/`until`（YYYY-MM-DD 範囲）, `nameOfHouse`（列挙: 衆議院/参議院/両院/両院協議会）, `maximumRecords`（1〜100、既定 30）。
+主要引数: `speaker_name`（部分一致 OR、半角スペース区切りで複数指定可）, `from`/`until`（YYYY-MM-DD 範囲）, `limit`（1〜100、既定 30）。
 
 レスポンスは `speechRecord[]` 配列。各要素に会議メタ（`issueID`, `session`, `nameOfHouse`, `nameOfMeeting`, `date` 等）がフラット展開されている。
 
-### 2. `meeting_list` — 会議一覧（軽量索引）
+### 2. `search-by-keyword.sh` — キーワード検索（any 検索、AND）
 
-会議メタ情報のみ返す。発言本文は含まれないため一覧生成・絞り込みに向く。
+発言本文に対する全文検索。複数キーワードは半角スペース区切りで AND 結合。
 
-```text
-# 特定会期の予算委員会一覧
-GET https://kokkai.ndl.go.jp/api/meeting_list?sessionFrom=213&sessionTo=213&nameOfMeeting=予算委員会&recordPacking=json
-
-# 特定日の全会議
-GET https://kokkai.ndl.go.jp/api/meeting_list?from=2024-10-04&until=2024-10-04&recordPacking=json
+```bash
+# AND 検索: マイナンバー かつ 個人情報 を含む発言
+bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2024-12-31 50
 ```
 
-主要パラメータ: `nameOfMeeting`（会議名・OR 部分一致）, `sessionFrom`/`sessionTo`（回次範囲）, `from`/`until`（日付範囲）, `maximumRecords`（1〜100、既定 30）。
+主要引数: `keyword`（部分一致 AND）, `from`/`until`, `limit`。レスポンス構造は `search-by-speaker.sh` と同一。
 
-レスポンスは `meetingRecord[]`。各要素配下の `speechRecord[]` は **発言メタの最小集合のみ**（`speechID`, `speechOrder`, `speaker`, `speechURL`）。本文取得には `speech` または `meeting` を呼ぶ。
+### 3. `search-by-role.sh` — 役割で発言検索（参考人質疑など）
 
-### 3. `meeting` — 会議全文（最終手段）
+`speakerRole` で発言者の役割を絞り込む。証人喚問・参考人質疑・公述人発言の抽出に使う。
 
-会議全文を返す。1 リクエストで全発言が返るため重い。`maximumRecords` 上限が他より小さい（1〜10、既定 3）のはこの理由。
-
-```text
-# issueID で会議全文取得(推奨)
-GET https://kokkai.ndl.go.jp/api/meeting?issueID=121405254X00220241004&recordPacking=json
+```bash
+# 参考人質疑のみ
+bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50
 ```
 
-`meeting_list` または `speech` で `issueID` を特定してから呼ぶこと。`meeting` の `speechRecord[]` は全フィールド完備（`speech`, `speakerYomi`, `speakerGroup`, `speakerPosition`, `speakerRole`, `startPage`, `createTime`/`updateTime`）。
+主要引数: `role`（**証人** / **参考人** / **公述人** のいずれか。それ以外を指定すると API が HTTP 400 で弾く）, `from`/`until`, `limit`。
+
+### 4. `list-meetings.sh` — 会議一覧（軽量索引）
+
+会議メタ情報のみ返す。発言本文は含まれないため一覧生成・絞り込みに向く。`issueID` 特定に使う。
+
+```bash
+# 特定日の予算委員会一覧
+bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50
+```
+
+主要引数: `meeting_name`（会議名・OR 部分一致）, `from`/`until`, `limit`。
+
+レスポンスは `meetingRecord[]`。各要素配下の `speechRecord[]` は **発言メタの最小集合のみ**（`speechID`, `speechOrder`, `speaker`, `speechURL`）。本文取得には `search-by-*` または `fetch-meeting.sh` を呼ぶ。
+
+### 5. `fetch-meeting.sh` — 会議全文（最終手段）
+
+会議全文を返す。1 リクエストで全発言が返るため重い。`list-meetings.sh` で `issueID` を特定してから呼ぶこと。
+
+```bash
+# issueID で会議全文取得
+bash scripts/fetch-meeting.sh 121405254X00220241004
+```
+
+主要引数: `issueID`（21 桁の英数字、必須）。`maximumRecords=1` 固定（issueID 一意のため）。
+
+`fetch-meeting.sh` の `speechRecord[]` は全フィールド完備（`speech`, `speakerYomi`, `speakerGroup`, `speakerPosition`, `speakerRole`, `startPage`, `createTime`/`updateTime`）。
 
 ## トークン節約ガイダンス
 
-`meeting` は 1 会議で数百 KB〜MB 規模になる。順守事項:
+`bash scripts/fetch-meeting.sh` は 1 会議で数百 KB〜MB 規模になる。順守事項:
 
-1. **`speech` を優先する**: 発言単位なら必要な部分だけ取れる。`meeting` はユーザーが明示的に「会議全文」を要求した場合のみ
-2. **`recordPacking=json` を必ず指定**: XML より構造が扱いやすい上、データ量も若干小さい
-3. **`maximumRecords` を明示**: 既定 30 で十分な場合は省略可。多数取得時は上限（speech/meeting_list: 100、meeting: 10）まで上げてリクエスト総数を減らす
-4. **2 段階検索を使う**: まず `meeting_list` または `speech` で対象を絞り込み、`issueID` を取得 → 必要に応じて `meeting` で全文。最初から `meeting` を打たない
-5. **ヒット 0 件時のリトライは表記揺れを試す**: 議員名は `福島 みずほ` / `福島瑞穂` / ひらがなを順に試す。会派名は **必ず正式名称**（`自民党` ❌ / `自由民主党` ✅）
+1. **`search-by-*.sh` を優先する**: 発言単位なら必要な部分だけ取れる。`bash scripts/fetch-meeting.sh` はユーザーが明示的に「会議全文」を要求した場合のみ
+2. **`maximumRecords` を明示**: 既定 30 で十分な場合は省略可。多数取得時は上限（search-by-*/list-meetings: 100、fetch-meeting: 10）まで上げてリクエスト総数を減らす
+3. **2 段階検索を使う**: まず `list-meetings.sh` または `search-by-*.sh` で対象を絞り込み、`issueID` を取得 → 必要に応じて `fetch-meeting.sh` で全文。最初から `fetch-meeting.sh` を打たない
+4. **ヒット 0 件時のリトライは表記揺れを試す**: 議員名は `福島 みずほ` / `福島瑞穂` / ひらがなを順に試す。会派名は **必ず正式名称**（`自民党` ❌ / `自由民主党` ✅）
 
 ## 結果フィルタリングの落とし穴
 
@@ -119,42 +130,48 @@ GET https://kokkai.ndl.go.jp/api/meeting?issueID=121405254X00220241004&recordPac
 3. **`closing` は `false` ではなく `null` を返す**: 閉会中フラグが立っていない通常会議では `null`。閉会中審査の判定は `closing` の値が `true` の場合のみで行う（`false` との比較ではなく `true` との比較を使うこと）
 4. **`nameOfHouse` の不正値は silently 無視される**: HTTP 200 でフィルタ未適用の結果が返る。意図が反映されているか `numberOfRecords` の妥当性で確認すること
 5. **発言本文の改行は CRLF (`\r\n`)**: LF のみではない。テキスト処理時は正規化が必要な場合あり
-6. **`speech` のレスポンス構造はフラット**: `meeting` のような `meetingRecord` ラッパは持たない。共通パーサを書くなら分岐が必要
+6. **`search-by-*.sh` のレスポンス構造はフラット**: `fetch-meeting.sh` のような `meetingRecord` ラッパは持たない。共通パーサを書くなら分岐が必要
+7. **API のソート順は「会議開催日の降順」で固定**: 公式仕様で並び順が降順保証されており、ソート指定パラメータは存在しない（search-by-speaker / search-by-keyword / list-meetings / fetch-meeting いずれも同様）。便利な反面、`maximumRecords` で部分取得すると **新しい側 N 件のみ** が返る。
+    - 最新発言判定: 部分取得の先頭で OK（`maximumRecords=1` で十分）
+    - 最古発言判定: 部分取得結果から最古を断定しない。`numberOfRecords` 全件をページネーション末尾まで取得するか、`from` / `until` で年単位等に区切ってヒット件数 ≤ `maximumRecords` まで狭めてから判定する
 
 ## よく使う検索パターン例
 
 ### 議員の特定期間の発言
 
-```text
-GET https://kokkai.ndl.go.jp/api/speech?speaker=石破茂&from=2024-10-01&until=2024-10-31&maximumRecords=100&recordPacking=json
+```bash
+bash scripts/search-by-speaker.sh 石破茂 2024-10-01 2024-10-31 100
 ```
 
 ### 法案審議の追跡（時系列）
 
-```text
-GET https://kokkai.ndl.go.jp/api/speech?any=マイナンバー法&from=2023-01-01&recordPacking=json&maximumRecords=100
+```bash
+bash scripts/search-by-keyword.sh マイナンバー法 2023-01-01 '' 100
 ```
 
 ### 内閣総理大臣演説の抽出
 
-```text
-GET https://kokkai.ndl.go.jp/api/speech?speakerPosition=内閣総理大臣&nameOfMeeting=本会議&from=2024-01-01&recordPacking=json
+`speakerPosition` 引数は wrapper 非対応のため raw curl を使う:
+
+```bash
+# wrapper 非対応のため raw curl
+curl -s 'https://kokkai.ndl.go.jp/api/speech?speakerPosition=%E5%86%85%E9%96%A3%E7%B7%8F%E7%90%86%E5%A4%A7%E8%87%A3&nameOfMeeting=%E6%9C%AC%E4%BC%9A%E8%AD%B0&from=2024-01-01&recordPacking=json'
 ```
 
 ### 参考人質疑
 
-```text
-GET https://kokkai.ndl.go.jp/api/speech?speakerRole=参考人&from=2024-01-01&recordPacking=json
+```bash
+bash scripts/search-by-role.sh 参考人 2024-01-01 '' 100
 ```
 
 ### 特定会議の議事全文（2 段階）
 
-```text
-# Step 1: issueID 特定
-GET https://kokkai.ndl.go.jp/api/meeting_list?nameOfMeeting=予算委員会&nameOfHouse=衆議院&from=2024-03-01&until=2024-03-01&recordPacking=json
+```bash
+# Step 1: issueID 特定（nameOfHouse フィルタは wrapper 非対応のため一覧から手動選択）
+bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-01 50
 
 # Step 2: 全文取得
-GET https://kokkai.ndl.go.jp/api/meeting?issueID=<上記で取得した21桁ID>&recordPacking=json
+bash scripts/fetch-meeting.sh <issueID>
 ```
 
 ## ページネーション
@@ -189,8 +206,27 @@ GET https://kokkai.ndl.go.jp/api/meeting?issueID=<上記で取得した21桁ID>&
 - ...
 ```
 
+## raw curl が必要なケース
+
+以下のパラメータは wrapper script が covers しない。必要時は `curl` / `Invoke-RestMethod` で直接 API を叩く:
+
+- `sessionFrom` / `sessionTo`（回次絞り込み）
+- `contentsAndIndex` / `supplementAndAppendix`（目次・索引・附録）
+- `closing=true`（閉会中審査限定）
+- `nameOfHouse` / `nameOfMeeting` 等の二次フィルタ（wrapper の引数に含めていない）
+- ページネーション（`startRecord` + `nextRecordPosition` の連続呼び出し）
+
+例: 第 213 回国会の予算委員会のみを抽出する場合（`sessionFrom`/`sessionTo` 必要、wrapper 非対応）
+
+```bash
+curl -s 'https://kokkai.ndl.go.jp/api/meeting_list?sessionFrom=213&sessionTo=213&nameOfMeeting=%E4%BA%88%E7%AE%97%E5%A7%94%E5%93%A1%E4%BC%9A&maximumRecords=30&recordPacking=json'
+```
+
+`WebFetch` 等の内部要約モデルを介在させるツールは、レスポンスに存在しないフィールドを hallucination として混入させる事象が観測されているため、生データ取得には使わないこと（詳細は [response-format.md](references/response-format.md) 参照）。
+
 ## 詳細リファレンス
 
 - [api-reference.md](references/api-reference.md): エンドポイント仕様・ページネーション・エラーレスポンス
 - [parameters.md](references/parameters.md): 検索パラメータの完全な仕様・検索方式・組み合わせ例
 - [response-format.md](references/response-format.md): レスポンス構造・実 JSON サンプル・実測ベースの落とし穴
+- [recipes.md](references/recipes.md): 複合パターン集（議員 × キーワード絞り込み等、scripts では covers できないケース）
