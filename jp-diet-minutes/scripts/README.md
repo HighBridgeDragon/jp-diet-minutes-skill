@@ -13,6 +13,18 @@
 - `from` / `until` / `limit` は positional 引数。順序固定（互換性のため将来も変更しない）
 - 全スクリプトで `recordPacking=json` を強制
 
+### urlencode 関数の意図的な複製
+
+`search-by-speaker.sh` / `search-by-keyword.sh` / `search-by-role.sh` / `list-meetings.sh` の 4 スクリプトには同一の `urlencode()` 関数が複製されている（`fetch-meeting.sh` は `issueID` が 21 桁英数字のみのためエンコード不要）。これは **意図的な設計判断** で、姉妹 skill `jp-law` と同じく「各スクリプトを単一ファイルで自己完結させる」ことを優先している。共有ライブラリ化（`_urlencode.sh` 等）は採用しない。
+
+理由:
+
+- skill 配布時に `bash scripts/<name>.sh` 単体で動作する状態を維持したい
+- POSIX 系 `od`/`tr`/`grep` ベースの安定したコードで、将来の修正頻度が極めて低い
+- 4 スクリプト共通の場合は `git grep urlencode jp-diet-minutes/scripts/` で一括検索 → 同時編集できる
+
+将来 urlencode 内のバイト範囲扱いを変更する場合は、4 ファイル同時に編集すること。
+
 ## API スクリプト
 
 ### search-by-speaker.sh
