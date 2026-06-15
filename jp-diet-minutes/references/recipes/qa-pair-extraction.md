@@ -32,7 +32,7 @@ for ($i = 1; $i -lt $records.Count; $i++) {
 ## 補足
 
 - `speakerPosition` は答弁者（内閣総理大臣・各省大臣・参考人等）に設定される
-- 議員（質問者）の `speakerPosition` は通常空文字
+- 議員（質問者）の `speakerPosition` は通常 `null`（API の実測値。空文字 `""` ではなく `null` が返る）。bash/jq で同等処理を書く場合は `== ""` ではなく `== null` で判定すること
 - 「直前の発言が議員、現在の発言が答弁者」を Q→A ペアの近似として扱う簡易ヒューリスティック
 
 ## 関連
