@@ -24,7 +24,9 @@ Start-Sleep -Seconds 3
 $oldestProbe = bash scripts/search-by-speaker.sh 松岡克由 1971-01-01 1973-12-31 1
 $oldestDate = ($oldestProbe | ConvertFrom-Json).speechRecord[0].date
 Write-Host "1971-1973 range, newest record date: $oldestDate"
-# 結果が 1973-07-17 などなら、その年以前にはヒットなし → 1973-07-17 が最古候補
+# 1971-1973 の範囲内で最新の日付が確認できた（例: 1973-07-17）
+# → 最古確定には from/until をさらに狭める（例: 1971-01-01〜1972-12-31 で再クエリ）か、
+#   補足のページネーション手法（startRecord = numberOfRecords - limit + 1）を使う
 ```
 
 ## 補足
