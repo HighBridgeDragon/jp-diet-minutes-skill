@@ -13,4 +13,5 @@ if [ -z "$ISSUE_ID" ]; then
   exit 1
 fi
 
+# issueID は 21 桁英数字のみ（例: 121405254X00220241004）。URL エンコード不要
 curl -s "https://kokkai.ndl.go.jp/api/meeting?issueID=${ISSUE_ID}&maximumRecords=1&recordPacking=json"
