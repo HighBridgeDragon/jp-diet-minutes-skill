@@ -1,0 +1,19 @@
+.gitignore
+  s_431586b2abb3ab::t_3957667fe8f57f 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "e3484d7308f1436e06e52119a62bc61106e312c9",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
