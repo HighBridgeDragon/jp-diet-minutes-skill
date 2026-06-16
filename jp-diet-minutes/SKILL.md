@@ -40,7 +40,7 @@ NDL（国立国会図書館）の国会会議録検索システム API 経由で
 
 「○○委員会の会議一覧を見せて」
   → bash scripts/list-meetings.sh ○○ [from] [until] [limit] --sort <keys>
-  ※ 軽量。会議メタのみ返却（発言本文は含まない）。--sort 必須（date-asc / date-desc）
+  ※ 軽量。会議メタのみ返却（発言本文は含まない）。`--sort` 必須（`date-asc` / `date-desc` のみ）
 
 「特定の会議の全発言を見せて」「○○委員会 YYYY-MM-DD の議事録全文」
   → Step 1: bash scripts/list-meetings.sh で対象会議の issueID を特定
@@ -58,7 +58,7 @@ NDL（国立国会図書館）の国会会議録検索システム API 経由で
 
 ```bash
 # 議員名で発言抽出（部分一致 OR）、日付降順
-bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 100 --sort date-desc
+bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 50 --sort date-desc
 ```
 
 全引数仕様（取りうる sort key の詳細含む）は `bash scripts/search-by-speaker.sh -h` を参照。
@@ -134,7 +134,7 @@ bash scripts/fetch-meeting.sh 121405254X00220241004
 4. **`nameOfHouse` の不正値は silently 無視される**: HTTP 200 でフィルタ未適用の結果が返る。意図が反映されているか `numberOfRecords` の妥当性で確認すること
 5. **発言本文の改行は CRLF (`\r\n`)**: LF のみではない。テキスト処理時は正規化が必要な場合あり
 6. **`search-by-*.sh` のレスポンス構造はフラット**: `fetch-meeting.sh` のような `meetingRecord` ラッパは持たない。共通パーサを書くなら分岐が必要
-7. **API のソート順は「会議開催日の降順」で固定**: 公式仕様で並び順が降順保証されており、ソート指定パラメータは存在しない（search-by-speaker / search-by-keyword / list-meetings / fetch-meeting いずれも同様）。便利な反面、`maximumRecords` で部分取得すると **新しい側 N 件のみ** が返る。
+7. **API のソート順は「会議開催日の降順」で固定**: 公式仕様で並び順が降順保証されており、**API 側にはソート指定パラメータは存在しない**（search-by-speaker / search-by-keyword / list-meetings / fetch-meeting いずれも同様）。本 skill の wrapper script の `--sort` は API パラメータではなく **`jq` 経由のクライアント側ソート後処理**（`search-by-*.sh` / `list-meetings.sh` で必須）。便利な反面、`maximumRecords` で部分取得すると **新しい側 N 件のみ** が返る。
     - 最新発言判定: 部分取得の先頭で OK（`maximumRecords=1` で十分）
     - 最古発言判定: 部分取得結果から最古を断定しない。`numberOfRecords` 全件をページネーション末尾まで取得するか、`from` / `until` で年単位等に区切ってヒット件数 ≤ `maximumRecords` まで狭めてから判定する
 
