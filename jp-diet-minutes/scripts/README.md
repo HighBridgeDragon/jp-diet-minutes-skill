@@ -9,9 +9,13 @@
 - shebang `#!/bin/bash`
 - `set -e` で異常時即終了
 - 引数未指定時は `Usage:` を stderr に出力して `exit 1`
-- 出力は curl の生レスポンス body のみ（HTTP ステータスは body 内 `message` から判定）
+- 出力は curl の生レスポンス body（`search-by-*.sh` / `list-meetings.sh` は `jq` でソート後）
 - `from` / `until` / `limit` は positional 引数。順序固定（互換性のため将来も変更しない）
 - 全スクリプトで `recordPacking=json` を強制
+- 全スクリプトに `-h` / `--help` を実装。引数仕様の詳細は `bash scripts/<name>.sh -h` で確認できる
+- `search-by-*.sh` / `list-meetings.sh` の 4 本は **`--sort <keys>` が必須引数**。`jq` 経由でクライアント側ソートを行う。利用者が API ソート順仕様（会議開催日降順 + 同日 speechOrder 昇順）を意識せざるを得ない構造的ガード
+- 取りうる sort key: `date-asc` / `date-desc` / `speech-order-asc` / `speech-order-desc`（`list-meetings.sh` は `date-*` のみ）。カンマ区切りで複合指定可
+- Exit code: 0 (成功) / 1 (引数不足 or jq 不在) / 2 (不正 option or sort key)
 
 ### urlencode 関数の意図的な複製
 
@@ -32,7 +36,7 @@
 議員名で発言を検索する（`GET /api/speech?speaker=X`）。
 
 ```bash
-bash scripts/search-by-speaker.sh <speaker_name> [from] [until] [limit]
+bash scripts/search-by-speaker.sh <speaker_name> [from] [until] [limit] --sort <keys>
 ```
 
 | 引数 | 必須 | 既定値 | 説明 |
@@ -41,12 +45,18 @@ bash scripts/search-by-speaker.sh <speaker_name> [from] [until] [limit]
 | `from` | | （指定なし） | 開会日付の下限 `YYYY-MM-DD` |
 | `until` | | （指定なし） | 開会日付の上限 `YYYY-MM-DD` |
 | `limit` | | 30 | `maximumRecords`（1〜100） |
+| `--sort` | ✅ | — | sort key（`date-asc` / `date-desc` / `speech-order-asc` / `speech-order-desc`、カンマ区切り複合可） |
+
+全引数仕様（取りうる値・複合キー指定例等）は `bash scripts/search-by-speaker.sh -h` を参照。
 
 例:
 
 ```bash
-# 岸田文雄の 2024 年の発言を 50 件取得
-bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 50
+# 岸田文雄の 2024 年の発言を 50 件、日付降順で取得
+bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 50 --sort date-desc
+
+# 松岡克由の 1972-06-08 の発言を speechOrder 昇順で取得（最古発言確定用）
+bash scripts/search-by-speaker.sh 松岡克由 1972-06-08 1972-06-08 100 --sort date-asc,speech-order-asc
 ```
 
 ### search-by-keyword.sh
@@ -54,14 +64,16 @@ bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 50
 キーワードで発言本文を検索する（`GET /api/speech?any=X`、AND 部分一致）。
 
 ```bash
-bash scripts/search-by-keyword.sh <keyword> [from] [until] [limit]
+bash scripts/search-by-keyword.sh <keyword> [from] [until] [limit] --sort <keys>
 ```
+
+`--sort` 必須。詳細は `bash scripts/search-by-keyword.sh -h` を参照。
 
 例:
 
 ```bash
-# 「マイナンバー 個人情報」を両方含む発言を取得（AND 検索）
-bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2024-12-31 50
+# 「マイナンバー 個人情報」を両方含む発言を日付降順で取得（AND 検索）
+bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2024-12-31 50 --sort date-desc
 ```
 
 ### search-by-role.sh
@@ -69,16 +81,17 @@ bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2
 役割で発言を検索する（`GET /api/speech?speakerRole=X`）。
 
 ```bash
-bash scripts/search-by-role.sh <role> [from] [until] [limit]
+bash scripts/search-by-role.sh <role> [from] [until] [limit] --sort <keys>
 ```
 
 `role` は `証人` / `参考人` / `公述人` のいずれか。それ以外を指定すると API が HTTP 400 で弾く。
+`--sort` 必須。詳細は `bash scripts/search-by-role.sh -h` を参照。
 
 例:
 
 ```bash
-# 2024 年の参考人質疑を 50 件取得
-bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50
+# 2024 年の参考人質疑を 50 件、日付降順で取得
+bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50 --sort date-desc
 ```
 
 ### list-meetings.sh
@@ -86,14 +99,16 @@ bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50
 会議一覧を取得する（`GET /api/meeting_list`）。`issueID` 特定に使う。
 
 ```bash
-bash scripts/list-meetings.sh <meeting_name> [from] [until] [limit]
+bash scripts/list-meetings.sh <meeting_name> [from] [until] [limit] --sort <keys>
 ```
+
+`--sort` 必須。`list-meetings.sh` は会議粒度のため有効 key は `date-asc` / `date-desc` のみ。詳細は `bash scripts/list-meetings.sh -h` を参照。
 
 例:
 
 ```bash
-# 2024-03 の予算委員会一覧を取得
-bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50
+# 2024-03 の予算委員会一覧を日付昇順で取得
+bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50 --sort date-asc
 ```
 
 ### fetch-meeting.sh
@@ -111,6 +126,8 @@ bash scripts/fetch-meeting.sh <issueID>
 bash scripts/fetch-meeting.sh 121405254X00220241004
 ```
 
+詳細は `bash scripts/fetch-meeting.sh -h` を参照。
+
 ## raw curl が必要なケース
 
 以下のパラメータは wrapper が covers しない。SKILL.md「raw curl が必要なケース」節を参照:
@@ -125,6 +142,7 @@ bash scripts/fetch-meeting.sh 121405254X00220241004
 
 - `bash` 4 以上
 - `curl`
+- `jq`（**required**: `search-by-*.sh` / `list-meetings.sh` で `--sort` 必須化のため。`fetch-meeting.sh` のみ不要）
 - `od` / `tr` / `grep`（URL エンコード用、POSIX 系で標準搭載）
 - インターネット接続
 
