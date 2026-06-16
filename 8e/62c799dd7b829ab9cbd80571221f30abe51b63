@@ -1,0 +1,25 @@
+jp-diet-minutes/scripts/README.md
+  s_431586b2abb3ab::t_20214e906e8c73 12,15-18
+  s_431586b2abb3ab::t_a2eadb26c546dc 67,70-71,75-76
+  s_431586b2abb3ab::t_ab583a62748412 102,105-106,110-111
+  s_431586b2abb3ab::t_e767452665e0b7 129-130
+  s_431586b2abb3ab::t_af87f7a0080fb0 84,88,93-94
+  s_431586b2abb3ab::t_79e2cc8d8e07b7 49,145
+  s_431586b2abb3ab::t_b5ee3ed3dfb354 39,48,50,55-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "8e62c799dd7b829ab9cbd80571221f30abe51b63",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
