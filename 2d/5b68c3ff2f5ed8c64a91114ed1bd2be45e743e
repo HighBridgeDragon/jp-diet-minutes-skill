@@ -1,0 +1,19 @@
+jp-diet-minutes/scripts/search-by-keyword.sh
+  s_431586b2abb3ab::t_0ac43605190771 5-6,8-75,78-91,109-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "2d5b68c3ff2f5ed8c64a91114ed1bd2be45e743e",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
