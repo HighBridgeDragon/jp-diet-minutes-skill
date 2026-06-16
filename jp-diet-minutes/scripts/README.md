@@ -9,7 +9,7 @@
 - shebang `#!/bin/bash`
 - `set -e` で異常時即終了
 - 引数未指定時は `Usage:` を stderr に出力して `exit 1`
-- 出力は curl の生レスポンス body（`search-by-*.sh` / `list-meetings.sh` は `jq` でソート後）
+- 出力は curl の生レスポンス body（`--sort` 指定スクリプトは下記の `jq` 経由のソート後）
 - `from` / `until` / `limit` は positional 引数。順序固定（互換性のため将来も変更しない）
 - 全スクリプトで `recordPacking=json` を強制
 - 全スクリプトに `-h` / `--help` を実装。引数仕様の詳細は `bash scripts/<name>.sh -h` で確認できる
@@ -85,6 +85,7 @@ bash scripts/search-by-role.sh <role> [from] [until] [limit] --sort <keys>
 ```
 
 `role` は `証人` / `参考人` / `公述人` のいずれか。それ以外を指定すると API が HTTP 400 で弾く。
+
 `--sort` 必須。詳細は `bash scripts/search-by-role.sh -h` を参照。
 
 例:
