@@ -22,6 +22,7 @@ Required options:
   --sort <keys>   結果をクライアント側でソート（必須）
                     取りうる値: date-asc / date-desc / speech-order-asc / speech-order-desc
                     カンマ区切りで複合指定可（左ほど主キー、右が副キー）
+                    全キーは同方向（全 asc または全 desc）。方向混在は非サポート
                     例: --sort date-asc,speech-order-asc
 
 Options:
@@ -45,6 +46,11 @@ while [ $# -gt 0 ]; do
       exit 0
       ;;
     --sort)
+      if [ $# -lt 2 ]; then
+        echo "Error: --sort requires a value." >&2
+        echo "Valid keys: date-asc, date-desc, speech-order-asc, speech-order-desc" >&2
+        exit 2
+      fi
       SORT_KEYS="$2"
       shift 2
       ;;
@@ -104,16 +110,16 @@ URL="https://kokkai.ndl.go.jp/api/speech?speaker=${ENCODED}&maximumRecords=${LIM
 [ -n "$FROM" ] && URL="${URL}&from=${FROM}"
 [ -n "$UNTIL" ] && URL="${URL}&until=${UNTIL}"
 
-# sort key を jq フィルタに変換 (逆順 loop で安定ソートを利用)
+# sort key を解析: field と direction を分離
 IFS=',' read -ra KEY_ARR <<< "$SORT_KEYS"
-JQ_FILTER='.'
-for (( i=${#KEY_ARR[@]}-1; i>=0; i-- )); do
-  key="${KEY_ARR[i]}"
+FIELDS=()
+DIRECTIONS=()
+for key in "${KEY_ARR[@]}"; do
   case "$key" in
-    date-asc) JQ_FILTER="${JQ_FILTER} | sort_by(.date)" ;;
-    date-desc) JQ_FILTER="${JQ_FILTER} | sort_by(.date) | reverse" ;;
-    speech-order-asc) JQ_FILTER="${JQ_FILTER} | sort_by(.speechOrder)" ;;
-    speech-order-desc) JQ_FILTER="${JQ_FILTER} | sort_by(.speechOrder) | reverse" ;;
+    date-asc) FIELDS+=(".date"); DIRECTIONS+=("asc") ;;
+    date-desc) FIELDS+=(".date"); DIRECTIONS+=("desc") ;;
+    speech-order-asc) FIELDS+=(".speechOrder"); DIRECTIONS+=("asc") ;;
+    speech-order-desc) FIELDS+=(".speechOrder"); DIRECTIONS+=("desc") ;;
     *)
       echo "Error: Unknown sort key '$key'." >&2
       echo "Valid keys: date-asc, date-desc, speech-order-asc, speech-order-desc" >&2
@@ -122,5 +128,22 @@ for (( i=${#KEY_ARR[@]}-1; i>=0; i-- )); do
   esac
 done
 
-FULL_FILTER=".speechRecord |= (${JQ_FILTER})"
+# 方向混在チェック（全 asc または全 desc のみサポート）
+FIRST_DIR="${DIRECTIONS[0]}"
+for dir in "${DIRECTIONS[@]}"; do
+  if [ "$dir" != "$FIRST_DIR" ]; then
+    echo "Error: Mixed asc/desc directions in --sort are not supported." >&2
+    echo "Use all keys with the same direction (all -asc or all -desc)." >&2
+    exit 2
+  fi
+done
+
+# jq タプル比較で複合キーソート
+JQ_KEYS=$(IFS=,; echo "${FIELDS[*]}")
+if [ "$FIRST_DIR" = "asc" ]; then
+  FULL_FILTER=".speechRecord |= sort_by([${JQ_KEYS}])"
+else
+  FULL_FILTER=".speechRecord |= (sort_by([${JQ_KEYS}]) | reverse)"
+fi
+
 curl -s "$URL" | jq "$FULL_FILTER"
