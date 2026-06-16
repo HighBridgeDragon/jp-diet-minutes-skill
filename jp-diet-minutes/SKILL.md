@@ -27,19 +27,20 @@ NDL（国立国会図書館）の国会会議録検索システム API 経由で
 
 ```text
 「○○議員の発言を見せて」
-  → bash scripts/search-by-speaker.sh ○○ [from] [until] [limit]
+  → bash scripts/search-by-speaker.sh ○○ [from] [until] [limit] --sort <keys>
+  ※ --sort 必須。代表値は date-desc（最新優先）
 
 「△△に関する発言を探して」
-  → bash scripts/search-by-keyword.sh △△ [from] [until] [limit]
-  ※ any 検索（AND）。複数キーワードは半角スペース区切り
+  → bash scripts/search-by-keyword.sh △△ [from] [until] [limit] --sort <keys>
+  ※ any 検索（AND）。複数キーワードは半角スペース区切り。--sort 必須
 
 「参考人質疑（証人喚問・公述人含む）を抽出」
-  → bash scripts/search-by-role.sh 参考人 [from] [until] [limit]
-  ※ role は 証人 / 参考人 / 公述人 のいずれか
+  → bash scripts/search-by-role.sh 参考人 [from] [until] [limit] --sort <keys>
+  ※ role は 証人 / 参考人 / 公述人 のいずれか。--sort 必須
 
 「○○委員会の会議一覧を見せて」
-  → bash scripts/list-meetings.sh ○○ [from] [until] [limit]
-  ※ 軽量。会議メタのみ返却（発言本文は含まない）
+  → bash scripts/list-meetings.sh ○○ [from] [until] [limit] --sort <keys>
+  ※ 軽量。会議メタのみ返却（発言本文は含まない）。--sort 必須（date-asc / date-desc）
 
 「特定の会議の全発言を見せて」「○○委員会 YYYY-MM-DD の議事録全文」
   → Step 1: bash scripts/list-meetings.sh で対象会議の issueID を特定
@@ -53,49 +54,51 @@ NDL（国立国会図書館）の国会会議録検索システム API 経由で
 
 ### 1. `search-by-speaker.sh` — 議員名で発言検索（最頻用）
 
-検索条件にヒットした発言のみ返す。トークン効率が最も良い。
+検索条件にヒットした発言のみ返す。トークン効率が最も良い。`--sort` 必須で、API ソート順仕様を利用者が明示的に意識する構造になっている（#41 対策）。
 
 ```bash
-# 議員名で発言抽出（部分一致 OR）
-bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 100
+# 議員名で発言抽出（部分一致 OR）、日付降順
+bash scripts/search-by-speaker.sh 岸田文雄 2024-01-01 2024-12-31 100 --sort date-desc
 ```
 
-主要引数: `speaker_name`（部分一致 OR、半角スペース区切りで複数指定可）, `from`/`until`（YYYY-MM-DD 範囲）, `limit`（1〜100、既定 30）。
+全引数仕様（取りうる sort key の詳細含む）は `bash scripts/search-by-speaker.sh -h` を参照。
 
 レスポンスは `speechRecord[]` 配列。各要素に会議メタ（`issueID`, `session`, `nameOfHouse`, `nameOfMeeting`, `date` 等）がフラット展開されている。
 
 ### 2. `search-by-keyword.sh` — キーワード検索（any 検索、AND）
 
-発言本文に対する全文検索。複数キーワードは半角スペース区切りで AND 結合。
+発言本文に対する全文検索。複数キーワードは半角スペース区切りで AND 結合。`--sort` 必須。
 
 ```bash
-# AND 検索: マイナンバー かつ 個人情報 を含む発言
-bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2024-12-31 50
+# AND 検索: マイナンバー かつ 個人情報 を含む発言、日付降順
+bash scripts/search-by-keyword.sh 'マイナンバー 個人情報' 2024-01-01 2024-12-31 50 --sort date-desc
 ```
 
-主要引数: `keyword`（部分一致 AND）, `from`/`until`, `limit`。レスポンス構造は `search-by-speaker.sh` と同一。
+全引数仕様は `bash scripts/search-by-keyword.sh -h` を参照。レスポンス構造は `search-by-speaker.sh` と同一。
 
 ### 3. `search-by-role.sh` — 役割で発言検索（参考人質疑など）
 
-`speakerRole` で発言者の役割を絞り込む。証人喚問・参考人質疑・公述人発言の抽出に使う。
+`speakerRole` で発言者の役割を絞り込む。証人喚問・参考人質疑・公述人発言の抽出に使う。`--sort` 必須。
 
 ```bash
-# 参考人質疑のみ
-bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50
+# 参考人質疑のみ、日付降順
+bash scripts/search-by-role.sh 参考人 2024-01-01 2024-12-31 50 --sort date-desc
 ```
 
-主要引数: `role`（**証人** / **参考人** / **公述人** のいずれか。それ以外を指定すると API が HTTP 400 で弾く）, `from`/`until`, `limit`。
+`role` は **証人** / **参考人** / **公述人** のいずれか。それ以外を指定すると API が HTTP 400 で弾く。
+
+全引数仕様は `bash scripts/search-by-role.sh -h` を参照。
 
 ### 4. `list-meetings.sh` — 会議一覧（軽量索引）
 
-会議メタ情報のみ返す。発言本文は含まれないため一覧生成・絞り込みに向く。`issueID` 特定に使う。
+会議メタ情報のみ返す。発言本文は含まれないため一覧生成・絞り込みに向く。`issueID` 特定に使う。`--sort` 必須（`date-asc` / `date-desc` のみ）。
 
 ```bash
-# 特定日の予算委員会一覧
-bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50
+# 特定日の予算委員会一覧、日付昇順
+bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50 --sort date-asc
 ```
 
-主要引数: `meeting_name`（会議名・OR 部分一致）, `from`/`until`, `limit`。
+全引数仕様は `bash scripts/list-meetings.sh -h` を参照。
 
 レスポンスは `meetingRecord[]`。各要素配下の `speechRecord[]` は **発言メタの最小集合のみ**（`speechID`, `speechOrder`, `speaker`, `speechURL`）。本文取得には `search-by-*` または `fetch-meeting.sh` を呼ぶ。
 
@@ -108,7 +111,7 @@ bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-31 50
 bash scripts/fetch-meeting.sh 121405254X00220241004
 ```
 
-主要引数: `issueID`（21 桁の英数字、必須）。`maximumRecords=1` 固定（issueID 一意のため）。
+引数仕様は `bash scripts/fetch-meeting.sh -h` を参照。`maximumRecords=1` 固定（issueID 一意のため）。`--sort` は単一会議取得のため対象外（必要時は `jq` で出力を後処理）。
 
 `fetch-meeting.sh` の `speechRecord[]` は全フィールド完備（`speech`, `speakerYomi`, `speakerGroup`, `speakerPosition`, `speakerRole`, `startPage`, `createTime`/`updateTime`）。
 
@@ -140,13 +143,13 @@ bash scripts/fetch-meeting.sh 121405254X00220241004
 ### 議員の特定期間の発言
 
 ```bash
-bash scripts/search-by-speaker.sh 石破茂 2024-10-01 2024-10-31 100
+bash scripts/search-by-speaker.sh 石破茂 2024-10-01 2024-10-31 100 --sort date-desc
 ```
 
 ### 法案審議の追跡（時系列）
 
 ```bash
-bash scripts/search-by-keyword.sh マイナンバー法 2023-01-01 '' 100
+bash scripts/search-by-keyword.sh マイナンバー法 2023-01-01 '' 100 --sort date-asc
 ```
 
 ### 内閣総理大臣演説の抽出
@@ -161,14 +164,14 @@ curl -s 'https://kokkai.ndl.go.jp/api/speech?speakerPosition=%E5%86%85%E9%96%A3%
 ### 参考人質疑
 
 ```bash
-bash scripts/search-by-role.sh 参考人 2024-01-01 '' 100
+bash scripts/search-by-role.sh 参考人 2024-01-01 '' 100 --sort date-desc
 ```
 
 ### 特定会議の議事全文（2 段階）
 
 ```bash
 # Step 1: issueID 特定（nameOfHouse フィルタは wrapper 非対応のため一覧から手動選択）
-bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-01 50
+bash scripts/list-meetings.sh 予算委員会 2024-03-01 2024-03-01 50 --sort date-desc
 
 # Step 2: 全文取得
 bash scripts/fetch-meeting.sh <issueID>
