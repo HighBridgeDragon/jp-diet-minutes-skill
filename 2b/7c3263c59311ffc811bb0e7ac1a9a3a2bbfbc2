@@ -1,0 +1,19 @@
+jp-diet-minutes/scripts/list-meetings.sh
+  s_431586b2abb3ab::t_c269b21cf4f678 5-6,8-75,78-91,109-141
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "2b7c3263c59311ffc811bb0e7ac1a9a3a2bbfbc2",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
