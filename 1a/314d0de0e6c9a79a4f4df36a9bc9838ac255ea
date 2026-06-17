@@ -1,0 +1,25 @@
+jp-diet-minutes/scripts/list-meetings.sh
+  s_431586b2abb3ab::t_f5ab8b795c4ac6 58-62
+jp-diet-minutes/scripts/search-by-speaker.sh
+  s_431586b2abb3ab::t_e97db0e0a0fae5 58-62
+jp-diet-minutes/scripts/search-by-keyword.sh
+  s_431586b2abb3ab::t_3a6752c843972d 58-62
+jp-diet-minutes/scripts/search-by-role.sh
+  s_431586b2abb3ab::t_32534882563b34 58-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "1a314d0de0e6c9a79a4f4df36a9bc9838ac255ea",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
