@@ -36,7 +36,6 @@ Dependencies: bash, curl, jq (required)
 HELP
 }
 
-# 引数解析: positional + --sort (必須) + -h/--help
 POSITIONAL=()
 SORT_KEYS=""
 while [ $# -gt 0 ]; do
@@ -56,6 +55,11 @@ while [ $# -gt 0 ]; do
       ;;
     --sort=*)
       SORT_KEYS="${1#--sort=}"
+      if [ -z "$SORT_KEYS" ]; then
+        echo "Error: --sort= requires a non-empty value." >&2
+        echo "Valid keys: date-asc, date-desc, speech-order-asc, speech-order-desc" >&2
+        exit 2
+      fi
       shift
       ;;
     -*)
@@ -75,14 +79,12 @@ FROM="${POSITIONAL[1]}"
 UNTIL="${POSITIONAL[2]}"
 LIMIT="${POSITIONAL[3]:-30}"
 
-# Positional 必須チェック
 if [ -z "$SPEAKER" ]; then
   echo "Usage: bash scripts/search-by-speaker.sh <speaker_name> [from] [until] [limit] --sort <keys>" >&2
   echo "Run with -h for details." >&2
   exit 1
 fi
 
-# --sort 必須チェック
 if [ -z "$SORT_KEYS" ]; then
   echo "Error: --sort <keys> is required." >&2
   echo "Valid keys: date-asc, date-desc, speech-order-asc, speech-order-desc" >&2
@@ -90,7 +92,6 @@ if [ -z "$SORT_KEYS" ]; then
   exit 1
 fi
 
-# jq 必須チェック
 if ! command -v jq >/dev/null 2>&1; then
   echo "Error: jq is required. Install jq and retry." >&2
   exit 1
@@ -110,7 +111,6 @@ URL="https://kokkai.ndl.go.jp/api/speech?speaker=${ENCODED}&maximumRecords=${LIM
 [ -n "$FROM" ] && URL="${URL}&from=${FROM}"
 [ -n "$UNTIL" ] && URL="${URL}&until=${UNTIL}"
 
-# sort key を解析: field と direction を分離
 IFS=',' read -ra KEY_ARR <<< "$SORT_KEYS"
 FIELDS=()
 DIRECTIONS=()
@@ -128,7 +128,6 @@ for key in "${KEY_ARR[@]}"; do
   esac
 done
 
-# 方向混在チェック（全 asc または全 desc のみサポート）
 FIRST_DIR="${DIRECTIONS[0]}"
 for dir in "${DIRECTIONS[@]}"; do
   if [ "$dir" != "$FIRST_DIR" ]; then
@@ -138,7 +137,6 @@ for dir in "${DIRECTIONS[@]}"; do
   fi
 done
 
-# jq タプル比較で複合キーソート
 JQ_KEYS=$(IFS=,; echo "${FIELDS[*]}")
 if [ "$FIRST_DIR" = "asc" ]; then
   FULL_FILTER=".speechRecord |= sort_by([${JQ_KEYS}])"

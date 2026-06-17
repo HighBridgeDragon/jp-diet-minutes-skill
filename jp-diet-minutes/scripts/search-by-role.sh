@@ -55,6 +55,11 @@ while [ $# -gt 0 ]; do
       ;;
     --sort=*)
       SORT_KEYS="${1#--sort=}"
+      if [ -z "$SORT_KEYS" ]; then
+        echo "Error: --sort= requires a non-empty value." >&2
+        echo "Valid keys: date-asc, date-desc, speech-order-asc, speech-order-desc" >&2
+        exit 2
+      fi
       shift
       ;;
     -*)
