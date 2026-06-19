@@ -1,0 +1,20 @@
+jp-diet-minutes/references/recipes/oldest-speech-by-speaker.md
+  s_431586b2abb3ab::t_715a7744ab058a 55,57,59-61
+  s_431586b2abb3ab::t_f994b032b08d1b 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "15a770c4b6dfbc12652e3bfddd6966837d864646",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
