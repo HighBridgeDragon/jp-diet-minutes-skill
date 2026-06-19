@@ -14,6 +14,7 @@ description: 国会会議録検索システム API V2 wrapper scripts では cov
 - [meeting-speaker-keyword-filter.md](recipes/meeting-speaker-keyword-filter.md): 会議内の議員 × キーワード絞り込み。`speech` エンドポイントの `any` 検索で大量ヒット時の二次絞り込みや、過去質疑の引用元特定に有用
 - [oldest-speech-by-speaker.md](recipes/oldest-speech-by-speaker.md): 議員の特定期間における最古発言の特定。降順固定の API 仕様下で `from`/`until` を狭めて最古を探すパターン
 - [qa-pair-extraction.md](recipes/qa-pair-extraction.md): 同一会議内の質問者 → 答弁者ペア抽出。`speakerPosition` を識別子に Q&A 構造を可視化
+- [speaker-vs-any-disambiguation.md](recipes/speaker-vs-any-disambiguation.md): `speaker` / `any` の使い分け（議員 A の全発言 / A への言及 / A 本人の自己言及）。両者を併用すると積集合になる相互作用の回避と意図的活用
 
 ## 関連リソース
 
