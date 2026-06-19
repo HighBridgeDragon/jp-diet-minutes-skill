@@ -1,0 +1,25 @@
+jp-diet-minutes/references/parameters.md
+  s_431586b2abb3ab::t_1ff9d793590e11 116-137
+jp-diet-minutes/references/recipes/speaker-vs-any-disambiguation.md
+  s_431586b2abb3ab::t_2993291605ddae 1-68
+jp-diet-minutes/SKILL.md
+  s_431586b2abb3ab::t_62c93fa21ac3c7 140
+jp-diet-minutes/references/recipes.md
+  s_431586b2abb3ab::t_ac9fe53f70b379 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "516e19616ad6265a86b04288033cc33dec07226a",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
