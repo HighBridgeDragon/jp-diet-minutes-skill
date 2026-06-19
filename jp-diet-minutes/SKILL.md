@@ -138,6 +138,7 @@ bash scripts/fetch-meeting.sh 121405254X00220241004
     - 最新発言判定: 部分取得の先頭で OK（`maximumRecords=1` で十分）
     - 最古発言判定: 部分取得結果から最古を断定しない。`numberOfRecords` 全件をページネーション末尾まで取得するか、`from` / `until` で年単位等に区切ってヒット件数 ≤ `maximumRecords` まで狭めてから判定する
 8. **`any` と `speaker` の併用は積集合（件数が大幅減）**: 議員 A の発言を検索する目的で `any=A&speaker=A` のように両方指定すると、両条件を満たす発言（A 本人が自分の名前を含めて発言したもの）のみに絞られ、一方単独より大幅に件数が減る（実測: `speaker=石原慎太郎` 単独 2,098 件 / 両者併用 647 件）。議員 A の全発言には `speaker` 単独、A への言及には `any` 単独を使う。意図別の使い分けは [parameters.md の該当節](references/parameters.md#複数パラメータの併用と相互作用) と [recipes/speaker-vs-any-disambiguation.md](references/recipes/speaker-vs-any-disambiguation.md) を参照
+9. **`(19004)startRecord 範囲外` の「検索件数」は同一クエリの `numberOfRecords`**: エラーメッセージ `(19004)startRecord には 1 から検索件数までの値を指定してください。` の「検索件数」は **同一クエリでの `numberOfRecords`** を指す（実測ベース、公式仕様には明示なし）。別クエリ（`from`/`until` を付けない単純検索、`speaker` 単独 vs 併用、過去取得したキャッシュ値など）で取得した件数で `startRecord` を決めると 19004 を踏む。原因切り分けは **同一クエリで** `startRecord=1&maximumRecords=1` を 1 リクエスト発行し `numberOfRecords` を再確認する。項目 8 の積集合や `from`/`until` 追加で件数が縮むケースで頻発する（詳細は [api-reference.md の 19004 解説](references/api-reference.md#19004startrecord-範囲外の検索件数の解釈) を参照）
 
 ## よく使う検索パターン例
 
