@@ -17,7 +17,7 @@ meetingJson=$(bash scripts/fetch-meeting.sh 121405254X00220241004)
 
 # Step 2: speakerPosition が空でない発言（答弁者）を探し、直前の発言（質問者）とペア化
 echo "$meetingJson" \
-  | jq -r '.meetingRecord[0].speechRecord as $r
+  | jq '.meetingRecord[0].speechRecord as $r
       | range(1; $r | length) as $i
       | select($r[$i].speakerPosition != null and $r[$i-1].speakerPosition == null)
       | {
