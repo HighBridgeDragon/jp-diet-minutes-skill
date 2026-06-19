@@ -1,0 +1,19 @@
+jp-diet-minutes/references/recipes/qa-pair-extraction.md
+  s_3d458380475849::t_931c64445dfc8e 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "381aee6ace70fb0baa12e5ef0a3dfcb2c1e46c49",
+  "prompts": {},
+  "sessions": {
+    "s_3d458380475849": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6fd31e-e66f-4909-a0a4-021fa9d3f242",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
