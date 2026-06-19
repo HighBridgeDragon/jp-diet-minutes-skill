@@ -1,0 +1,52 @@
+jp-diet-minutes/scripts/search-by-speaker.sh
+  s_431586b2abb3ab::t_ee4b1f95274ee3 5-6,8-10,12-24,26-38,39-47,53-57,63-81,83-87,88-94,95-96,114,118,123-130,147
+  s_431586b2abb3ab::t_7cb19fab619114 25,48-52,115-117,119-122,131-139,140-146
+jp-diet-minutes/scripts/search-by-keyword.sh
+  s_431586b2abb3ab::t_0ac43605190771 5-6,8-57,63-80,83-96,114-147
+jp-diet-minutes/scripts/search-by-role.sh
+  s_431586b2abb3ab::t_b98e0139d16611 5,7,9-57,63-80,83,85-97,115-148
+jp-diet-minutes/scripts/list-meetings.sh
+  s_431586b2abb3ab::t_c269b21cf4f678 5-6,8-57,63-80,83-96,114-146
+jp-diet-minutes/scripts/fetch-meeting.sh
+  s_431586b2abb3ab::t_b934ac293f74c1 6,8-52,56
+jp-diet-minutes/scripts/README.md
+  s_431586b2abb3ab::t_20214e906e8c73 15-18
+  s_431586b2abb3ab::t_a2eadb26c546dc 67,70-71,75-76
+  s_431586b2abb3ab::t_ab583a62748412 103,106-107,111-112
+  s_431586b2abb3ab::t_e767452665e0b7 130-131
+  s_431586b2abb3ab::t_af87f7a0080fb0 84,89,94-95
+  s_431586b2abb3ab::t_79e2cc8d8e07b7 49,146
+  s_431586b2abb3ab::t_b5ee3ed3dfb354 39,48,50,55-59
+  s_431586b2abb3ab::t_9082e2d07f014b 88
+  s_431586b2abb3ab::t_7e5e2da11c9cd6 12
+jp-diet-minutes/SKILL.md
+  s_431586b2abb3ab::t_ba7bc085df9878 57,60,64
+  s_431586b2abb3ab::t_dc6c71d316a4b1 147
+  s_431586b2abb3ab::t_9c9981d3a51468 81,84-85,88-90
+  s_431586b2abb3ab::t_95a947114debd9 94,97-98,101
+  s_431586b2abb3ab::t_8620f37b4d382b 30-31,34-35,38-39,42
+  s_431586b2abb3ab::t_0259e1df47052b 153
+  s_431586b2abb3ab::t_d12c87a861874c 168
+  s_431586b2abb3ab::t_0f73293d42acbf 175
+  s_431586b2abb3ab::t_7601d5b2077066 70,73-74,77
+  s_431586b2abb3ab::t_9434fe5b7aca14 114
+  s_431586b2abb3ab::t_6a51dbde410bc9 43
+  s_431586b2abb3ab::t_dbcc2a2c435c32 61
+  s_431586b2abb3ab::t_f2ea3d925583b3 137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "fc6ba5e92d2d371d8f872580e9117b3575f5a87b",
+  "prompts": {},
+  "sessions": {
+    "s_431586b2abb3ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "025737f0-5870-4efe-afe9-bd1d6441732b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
