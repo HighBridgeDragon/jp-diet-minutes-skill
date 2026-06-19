@@ -219,6 +219,7 @@ bash scripts/fetch-meeting.sh <issueID>
 - `closing=true`（閉会中審査限定）
 - `nameOfHouse` / `nameOfMeeting` 等の二次フィルタ（wrapper の引数に含めていない）
 - ページネーション（`startRecord` + `nextRecordPosition` の連続呼び出し）
+- `any` と `speaker` の同時指定（議員本人の自己言及など、両者の積集合を意図的に活用する用途。詳細は [recipes/speaker-vs-any-disambiguation.md](references/recipes/speaker-vs-any-disambiguation.md) パターン 3）
 
 例: 第 213 回国会の予算委員会のみを抽出する場合（`sessionFrom`/`sessionTo` 必要、wrapper 非対応）
 
