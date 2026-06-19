@@ -11,27 +11,28 @@ description: 特定会議の speechRecord[] を議員名と発言本文キーワ
 
 ## スニペット
 
-```powershell
+```bash
 # Step 1: 対象会議の issueID を特定（事前に確定済みの場合は省略可）
-$listJson = bash scripts/list-meetings.sh 逓信委員会 1974-03-26 1974-03-26
-$issueID = ($listJson | ConvertFrom-Json).meetingRecord[0].issueID
+issueID=$(bash scripts/list-meetings.sh 逓信委員会 1974-03-26 1974-03-26 1 --sort date-desc \
+  | jq -r '.meetingRecord[0].issueID')
 
 # Step 2: 会議全文取得
-Start-Sleep -Seconds 3
-$meetingJson = bash scripts/fetch-meeting.sh $issueID
-$m = ($meetingJson | ConvertFrom-Json).meetingRecord[0]
+sleep 3
+meetingJson=$(bash scripts/fetch-meeting.sh "$issueID")
 
 # Step 3: クライアント側絞り込み（議員 × キーワード）
-$m.speechRecord |
-  Where-Object { $_.speaker -eq '松岡克由' -and $_.speech -match '前田|値上げ|甘い' } |
-  Select-Object speechOrder, @{n='excerpt';e={$_.speech.Substring(0,200)}}
+echo "$meetingJson" \
+  | jq '.meetingRecord[0].speechRecord[]
+        | select(.speaker == "松岡克由" and (.speech | test("前田|値上げ|甘い")))
+        | {speechOrder, excerpt: .speech[0:200]}'
 ```
 
 ## 補足
 
-- `speech -match` は PowerShell の正規表現マッチ。OR 検索は `|` で連結
+- `.speech | test("前田|値上げ|甘い")` は `jq` の正規表現マッチ。OR 検索は `|` で連結
+- `.speech[0:200]` は `jq` の文字列スライス。本文が 200 文字未満でも安全に切り出せる（末尾まで返る）
 - `meeting` の `speechRecord[]` は `speech` / `speaker` / `speechOrder` 等の全フィールドを持つ
-- bash 版は `jq` で同等の絞り込みが可能（`jq '.meetingRecord[0].speechRecord[] | select(.speaker=="X" and (.speech | test("Y")))'`）
+- `list-meetings.sh` は `--sort` 必須。単一会議の `issueID` 特定では順序は結果に影響しないため `date-desc` を指定している
 
 ## 関連
 
