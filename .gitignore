@@ -1,3 +1,7 @@
 .worktrees/
 .claude/worktrees/
 docs/
+
+# ローカルでの Release zip 生成物（CI では使い捨て環境のため無視される）
+/jp-diet-minutes.zip
+/jp-diet-minutes/LICENSE
