@@ -10,9 +10,26 @@
 
 ## Install
 
+### Claude Code / Cursor / GitHub Copilot CLI ほか
+
 ```bash
 npx skills add HighBridgeDragon/jp-diet-minutes-skill
 ```
+
+### claude.ai / Claude Desktop
+
+[Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードし、Settings > Features からアップロードします。
+
+Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
+
+#### 動作条件
+
+zip を導入しても、以下を満たさない環境では動作しません。
+
+- **プラン**: Pro / Max / Team / Enterprise のいずれかであること。
+- **コード実行**: 有効になっていること。本スキルは同梱の bash スクリプトから API を呼び出します。
+- **ネットワークアクセス**: Skill のサンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワークアクセスは user / admin 設定により full / partial / none のいずれかになり、外部へ出られない設定では動作しません。
+- **Claude API 経由では動作しません**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
 
 ## What it does / 機能
 
