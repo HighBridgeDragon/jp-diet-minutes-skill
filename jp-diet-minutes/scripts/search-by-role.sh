@@ -106,7 +106,7 @@ fi
 
 if [ -n "$SORT_KEYS" ] && [ "$HAVE_JQ" -eq 0 ]; then
   echo "Error: --sort requires jq, but jq was not found." >&2
-  echo "Install jq, or omit --sort to get raw JSON in API default order (meeting date descending)." >&2
+  echo "Install jq, or omit --sort to get raw JSON in API default order (meeting date descending, speechOrder ascending within the same day)." >&2
   exit 1
 fi
 
