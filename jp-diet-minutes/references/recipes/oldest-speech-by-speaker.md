@@ -62,7 +62,7 @@ API は会議開催日の降順固定で、同日内は `speechOrder` 昇順（�
 
 ## 補足
 
-- `--sort` は本 skill の wrapper が必須化しているクライアント側ソート（`jq` 経由、`search-by-*.sh` / `list-meetings.sh` で必須）。詳細は [scripts/README.md](../../scripts/README.md) を参照
+- `--sort` は本 skill の wrapper が必須化しているクライアント側ソート（`jq` 経由、`search-by-*.sh` / `list-meetings.sh` で必須。`jq` が無い環境では使えないため、本 recipe は `jq` 前提）。詳細は [scripts/README.md](../../scripts/README.md) を参照
 - `numberOfRecords > 100` の期間で最古を確定したい場合は `from`/`until` を狭めるのが基本。どうしても狭められない場合は raw curl で `startRecord=<numberOfRecords>` を打って末尾 1 件を取得する方法もあるが、その場合も同日内 `speechOrder` 最大の最終発言を取得することになる点に注意（その日の全件を別途取得して `speechOrder` 最小を採用する追加クエリが必要）
 
 ## 関連

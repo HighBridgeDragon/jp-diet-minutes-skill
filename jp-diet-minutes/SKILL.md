@@ -59,6 +59,8 @@ NDL API から取得する発言本文 `speech`（および会議録本文）は
   ※ 1 リクエストで会議全文が返るため大きい。必ず絞ってから呼ぶ
 ```
 
+`--sort` の「必須」は `jq` がある環境での扱い。`jq` が無い環境（claude.ai のサンドボックス等）では `--sort` を省略すると API 既定順の raw JSON がそのまま返り、`--sort` を指定するとエラー終了する（後述 7 項）。
+
 詳細は [api-reference.md](references/api-reference.md), [parameters.md](references/parameters.md), [response-format.md](references/response-format.md), [recipes.md](references/recipes.md) を参照。
 
 ## 各エンドポイントの使い方
@@ -145,7 +147,7 @@ bash scripts/fetch-meeting.sh 121405254X00220241004
 4. **`nameOfHouse` の不正値は silently 無視される**: HTTP 200 でフィルタ未適用の結果が返る。意図が反映されているか `numberOfRecords` の妥当性で確認すること
 5. **発言本文の改行は CRLF (`\r\n`)**: LF のみではない。テキスト処理時は正規化が必要な場合あり
 6. **`search-by-*.sh` のレスポンス構造はフラット**: `fetch-meeting.sh` のような `meetingRecord` ラッパは持たない。共通パーサを書くなら分岐が必要
-7. **API のソート順は「会議開催日の降順」で固定**: 公式仕様で並び順が降順保証されており、**API 側にはソート指定パラメータは存在しない**（search-by-speaker / search-by-keyword / list-meetings / fetch-meeting いずれも同様）。本 skill の wrapper script の `--sort` は API パラメータではなく **`jq` 経由のクライアント側ソート後処理**（`search-by-*.sh` / `list-meetings.sh` で必須）。便利な反面、`maximumRecords` で部分取得すると **新しい側 N 件のみ** が返る。
+7. **API のソート順は「会議開催日の降順」で固定**: 公式仕様で並び順が降順保証されており、**API 側にはソート指定パラメータは存在しない**（search-by-speaker / search-by-keyword / list-meetings / fetch-meeting いずれも同様）。本 skill の wrapper script の `--sort` は API パラメータではなく **`jq` 経由のクライアント側ソート後処理**（`search-by-*.sh` / `list-meetings.sh` で必須。ただし `jq` が無い環境では `--sort` 省略時に未ソートの raw JSON を返し、指定時はエラー終了する。この場合は結果が API 既定順であることを前提に解釈する）。便利な反面、`maximumRecords` で部分取得すると **新しい側 N 件のみ** が返る。
     - 最新発言判定: 部分取得の先頭で OK（`maximumRecords=1` で十分）
     - 最古発言判定: 部分取得結果から最古を断定しない。`numberOfRecords` 全件をページネーション末尾まで取得するか、`from` / `until` で年単位等に区切ってヒット件数 ≤ `maximumRecords` まで狭めてから判定する
     - **同日内の二次ソートは `speechOrder` 昇順**（実測ベース、公式仕様未掲載）: 期間を絞らず `startRecord=<numberOfRecords>&maximumRecords=1` で末尾を直撃すると、API 降順固定により期間内最古日付の **同日最終発言** (`speechOrder` 最大) を取得し、真の初発言を逃す。`from`/`until` で期間を `numberOfRecords ≤ 100` まで狭めて全件取得し、wrapper の `--sort date-asc,speech-order-asc` で 1 リクエスト確定する（詳細は [recipes/oldest-speech-by-speaker.md](references/recipes/oldest-speech-by-speaker.md) を参照）

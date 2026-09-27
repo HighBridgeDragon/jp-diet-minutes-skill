@@ -18,7 +18,7 @@ Custom Skill は面をまたいで同期しません。Claude Code に導入済�
 
 - **プラン**: Pro / Max / Team / Enterprise のいずれかであること。
 - **コード実行**: 有効になっていること。本スキルは同梱の bash スクリプトから API を呼び出します。
-- **`jq`**: 必須です。`list-meetings.sh` / `search-by-*.sh` はクライアント側ソートに `jq` を使い、無い場合はエラー終了します。
+- **`jq`**: 推奨です。`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
 - **ネットワークアクセス**: Skill のサンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワークアクセスは user / admin 設定により full / partial / none のいずれかになります。
 - **Claude API 経由では動作しません**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
 
@@ -27,9 +27,9 @@ Custom Skill は面をまたいで同期しません。Claude Code に導入済�
 zip のアップロードと skill の認識は**成功**しました。一方で、claude.ai のサンドボックスには次の 2 つの制約があり、**現状では API 取得まで到達できません**。
 
 - **`kokkai.ndl.go.jp` への通信がブロックされます**（`host_not_allowed`）。許可ドメインに含まれていないためです。
-- **`jq` が導入されていません**。ドメインが許可されても、`--sort` を使うスクリプトはこの時点で失敗します。
+- **`jq` が導入されていません**。`list-meetings.sh` / `search-by-*.sh` は `jq` が無い場合、`--sort` を省略すれば raw JSON を返します（#57 で対応）。
 
-claude.ai で実際に利用するには、組織のオーナーまたはユーザーのネットワーク設定で `kokkai.ndl.go.jp` を許可ドメインに追加する必要があります。`jq` 非依存化は別途対応が必要です。
+claude.ai で実際に利用するには、組織のオーナーまたはユーザーのネットワーク設定で `kokkai.ndl.go.jp` を許可ドメインに追加する必要があります。
 
 ## 利用上の注意
 
