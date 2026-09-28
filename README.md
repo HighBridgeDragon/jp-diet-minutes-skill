@@ -20,6 +20,9 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードし、Settings > Features からアップロードします。
 
+> [!IMPORTANT]
+> アップロードするのは **Releases に添付された `jp-diet-minutes.zip`** です。リポジトリ画面の **Code > Download ZIP** で取得した zip は展開時のトップが `jp-diet-minutes-skill-main/` になり、`SKILL.md` が直下に来ないため skill として認識されません。
+
 Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
 
 #### 動作条件
