@@ -10,13 +10,15 @@
 
 ## Install
 
-### Claude Code / Cursor / GitHub Copilot CLI ほか
+### Claude Code / Cursor / GitHub Copilot CLI / Gemini CLI ほか
 
 ```bash
 npx skills add HighBridgeDragon/jp-diet-minutes-skill
 ```
 
-### claude.ai / Claude Desktop
+### デスクトップ / Web アプリ
+
+#### claude.ai / Claude Desktop
 
 [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードし、Settings > Features からアップロードします。
 
@@ -25,7 +27,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
 
-#### 動作条件
+##### 動作条件
 
 zip を導入しても、以下を満たさない環境では動作しません。
 
@@ -34,6 +36,14 @@ zip を導入しても、以下を満たさない環境では動作しません�
 - **`jq`**: 推奨です。`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
 - **ネットワークアクセス**: Skill のサンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワークアクセス設定で通信がブロックされる場合は、許可ドメインに `kokkai.ndl.go.jp` を追加する必要があります（これを満たせない環境では Claude Code 経由をご利用ください）。
 - **Claude API 経由では動作しません**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
+
+#### ChatGPT Desktop / Goose Desktop / その他の Agent Skills 対応アプリ
+
+[Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロード・展開し、お使いのクライアントのスキルディレクトリ（例: `~/.agents/skills/jp-diet-minutes`）に配置します。
+
+- **ChatGPT Desktop**: `~/.agents/skills/jp-diet-minutes`（またはプロジェクトの `.agents/skills/jp-diet-minutes`）に配置すると、サイドバーの「Skills」から利用できます。
+- **Goose Desktop**: `~/.agents/skills/jp-diet-minutes` に配置すると自動認識されます。
+- **Web版 Gemini についての注意**: Web 版 Gemini（gemini.google.com）の Skills はプロンプトベースの拡張であり、スクリプト実行サンドボックスを持たないため動作しません（Gemini CLI または Google Antigravity をご利用ください）。
 
 ## What it does / 機能
 
@@ -50,21 +60,21 @@ zip を導入しても、以下を満たさない環境では動作しません�
 ## Capabilities / 提供機能
 
 | Capability | Endpoint | 用途 |
-|---|---|---|
-| Speech-level search / 発言単位検索 | `GET /api/speech` | 議員名・キーワード・会派・期間で発言を抽出（最大 100 件/req）|
-| Meeting list / 会議一覧 | `GET /api/meeting_list` | 会議メタのみの軽量索引（最大 100 件/req）|
-| Meeting full transcript / 会議全文 | `GET /api/meeting` | 会議全発言の取得（最大 10 件/req、サイズ大）|
+| --- | --- | --- |
+| Speech-level search / 発言単位検索 | `GET /api/speech` | 議員名・キーワード・会派・期間で発言を抽出（最大 100 件/req） |
+| Meeting list / 会議一覧 | `GET /api/meeting_list` | 会議メタのみの軽量索引（最大 100 件/req） |
+| Meeting full transcript / 会議全文 | `GET /api/meeting` | 会議全発言の取得（最大 10 件/req、サイズ大） |
 
-Supported agents / 対応エージェント: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), GitHub Copilot (Copilot CLI), Cursor, Cline, Claude Desktop, and any other [Agent Skills](https://agentskills.io)-compatible runtime.
+Supported agents / 対応エージェント: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), GitHub Copilot (Copilot CLI), Cursor, Cline, Claude Desktop / claude.ai, ChatGPT Desktop, Goose, Gemini CLI, Google Antigravity, and any other [Agent Skills](https://agentskills.io)-compatible runtime.
 
 ## 依存
 
 HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作します。代表的な構成:
 
 | エージェント | 推奨フェッチ手段 |
-|---|---|
+| --- | --- |
 | Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
-| Claude Desktop / Cursor / Cline | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）|
+| Claude Desktop / Cursor / Cline / ChatGPT Desktop | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはシェル実行 |
 | その他 | 任意の HTTP クライアント |
 
 ### Windows ユーザー向け注意
