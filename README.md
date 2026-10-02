@@ -4,46 +4,26 @@
 
 **Search and retrieve Japanese National Diet (国会) meeting minutes from the official NDL Kokkai API.** An [Agent Skill](https://agentskills.io) for Claude Code, Cursor, GitHub Copilot, and other compatible AI agents. No authentication required.
 
-国会発足（1947 年）以降の日本の国会議事録を国会会議録検索システム API 経由で調査するスキル（Claude Code / AI Agent 向け）。議員別の発言抽出、法案審議の追跡、会議全文取得、会派・期間・回次での絞り込みを AI エージェントから直接実行できます。
+国会発足（1947 年）以降の日本の国会議事録を国会会議録検索システム API 経由で調査するスキル（AI エージェント向け）。議員別の発言抽出、法案審議の追跡、会議全文取得、会派・期間・回次での絞り込みを AI エージェントから直接実行できます。
 
 姉妹スキル: 法令本文の調査は [jp-law-skill](https://github.com/HighBridgeDragon/jp-law-skill) を併用すると、法令と国会審議を行き来する調査が可能になります。
 
 ## Install
 
-### Claude Code / Cursor / GitHub Copilot CLI / Gemini CLI ほか
+### CLI / パッケージマネージャ
 
 ```bash
 npx skills add HighBridgeDragon/jp-diet-minutes-skill
 ```
 
-### デスクトップ / Web アプリ
+### デスクトップ / Web アプリ（zip 導入）
 
-#### claude.ai / Claude Desktop
+[Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして導入します。
 
-[Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードし、Settings > Features からアップロードします。
+- **claude.ai / Claude Desktop**: Settings > Features からアップロード
+- **ChatGPT Desktop / Goose Desktop ほか**: `~/.agents/skills/jp-diet-minutes` に展開して配置
 
-> [!IMPORTANT]
-> アップロードするのは **Releases に添付された `jp-diet-minutes.zip`** です。リポジトリ画面の **Code > Download ZIP** で取得した zip は展開時のトップが `jp-diet-minutes-skill-main/` になり、`SKILL.md` が直下に来ないため skill として認識されません。
-
-Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
-
-##### 動作条件
-
-zip を導入しても、以下を満たさない環境では動作しません。
-
-- **プラン**: Pro / Max / Team / Enterprise のいずれかであること。
-- **コード実行**: 有効になっていること。本スキルは同梱の bash スクリプトから API を呼び出します。
-- **`jq`**: 推奨です。`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
-- **ネットワークアクセス**: Skill のサンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワークアクセス設定で通信がブロックされる場合は、許可ドメインに `kokkai.ndl.go.jp` を追加する必要があります（これを満たせない環境では Claude Code 経由をご利用ください）。
-- **Claude API 経由では動作しません**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
-
-#### ChatGPT Desktop / Goose Desktop / その他の Agent Skills 対応アプリ
-
-[Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロード・展開し、お使いのクライアントのスキルディレクトリ（例: `~/.agents/skills/jp-diet-minutes`）に配置します。
-
-- **ChatGPT Desktop**: `~/.agents/skills/jp-diet-minutes`（またはプロジェクトの `.agents/skills/jp-diet-minutes`）に配置すると、サイドバーの「Skills」から利用できます。
-- **Goose Desktop**: `~/.agents/skills/jp-diet-minutes` に配置すると自動認識されます。
-- **Web版 Gemini についての注意**: Web 版 Gemini（gemini.google.com）の Skills はプロンプトベースの拡張であり、スクリプト実行サンドボックスを持たないため動作しません（Gemini CLI または Google Antigravity をご利用ください）。
+各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。
 
 ## What it does / 機能
 
