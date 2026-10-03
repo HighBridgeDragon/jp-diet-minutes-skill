@@ -23,7 +23,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 - **claude.ai / Claude Desktop**: Settings > Capabilities からアップロード（要 Pro 以上のプランおよびネットワーク許可。許可ドメインに `kokkai.ndl.go.jp` の追加が必要）
 - **OpenAI Codex**: `~/.agents/skills/` 直下に展開後の `jp-diet-minutes` フォルダを配置
 
-各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。
+各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。なお、Web 版 Gemini（gemini.google.com）はスクリプト実行機構を持たないため非対応です（Gemini CLI / Google Antigravity 推奨）。
 
 ## What it does / 機能
 
@@ -49,17 +49,7 @@ Supported agents / 対応エージェント: [Claude Code](https://docs.anthropi
 
 ## 依存
 
-HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作します。代表的な構成:
-
-| エージェント | 推奨フェッチ手段 |
-| --- | --- |
-| Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
-| claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要 Pro 以上のプラン + ネットワーク許可: `kokkai.ndl.go.jp`） |
-| GitHub Copilot CLI / Cursor / Cline / OpenAI Codex / Goose / Gemini CLI | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはエージェントのシェル実行機能 |
-| その他 | 任意の HTTP クライアント |
-
-> [!NOTE]
-> `mcp-server-fetch` を Windows で使う場合の文字化け対策（`PYTHONIOENCODING=utf-8`）や Git Bash / WSL 利用等の詳細については [docs/install.md#windows-環境での利用注意mcp-server-fetch](docs/install.md#windows-環境での利用注意mcp-server-fetch) を参照してください。
+HTTPS GET でアクセスできるフェッチツール（Claude Code の `WebFetch`、公式 MCP サーバ `mcp-server-fetch`、curl 等）が 1 つあれば動作します。各エージェントでの推奨フェッチ手段や Windows での設定例は [docs/install.md#実行環境と依存関係](docs/install.md#実行環境と依存関係) を参照してください。
 
 ## 国会会議録 API
 
