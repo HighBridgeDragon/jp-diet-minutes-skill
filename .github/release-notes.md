@@ -12,7 +12,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 本 Release に添付の `jp-diet-minutes.zip` をダウンロードして導入します。
 
-- **claude.ai / Claude Desktop**: Settings > Capabilities から `jp-diet-minutes.zip` をアップロードします（アップロードできるのは本 Release 添付の zip のみです。Code > Download ZIP の zip はリポジトリ全体を含み SKILL.md が直下に来ないため使えません）。
+- **claude.ai / Claude Desktop**: Settings > Capabilities から `jp-diet-minutes.zip` をアップロードします（アップロードできるのは本 Release 添付の zip のみです。Source code (zip) や Code > Download ZIP の zip はリポジトリ全体を含み `SKILL.md` が直下に来ないため使えません。また、Custom Skill は面をまたいで同期しないため個別にアップロードが必要です）。
 - **OpenAI Codex**: `~/.agents/skills/`（またはプロジェクトの `.agents/skills/`）直下に展開後の `jp-diet-minutes` フォルダを配置します（配置後のパス: `~/.agents/skills/jp-diet-minutes/SKILL.md`）。二重フォルダ（`jp-diet-minutes/jp-diet-minutes/`）にならないようご注意ください。
 - **Goose ほか対応クライアント**: 各ツールの設定手順に従って配置します（詳細は下記インストールガイドを参照）。
 
