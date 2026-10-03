@@ -2,7 +2,7 @@
 
 [![skills.sh](https://skills.sh/b/HighBridgeDragon/jp-diet-minutes-skill)](https://skills.sh/HighBridgeDragon/jp-diet-minutes-skill)
 
-**Search and retrieve Japanese National Diet (国会) meeting minutes from the official NDL Kokkai API.** An [Agent Skill](https://agentskills.io) for Claude Code, Cursor, GitHub Copilot, and other compatible AI agents. No authentication required.
+**Search and retrieve Japanese National Diet (国会) meeting minutes from the official NDL Kokkai API.** An [Agent Skill](https://agentskills.io) for compatible AI agents (Claude, Codex, Cursor, GitHub Copilot, Goose, Gemini, and more). No authentication required.
 
 国会発足（1947 年）以降の日本の国会議事録を国会会議録検索システム API 経由で調査するスキル（AI エージェント向け）。議員別の発言抽出、法案審議の追跡、会議全文取得、会派・期間・回次での絞り込みを AI エージェントから直接実行できます。
 
@@ -20,8 +20,8 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして導入します。
 
-- **claude.ai / Claude Desktop**: Settings > Features からアップロード
-- **ChatGPT Desktop / Goose Desktop ほか**: `~/.agents/skills/jp-diet-minutes` に展開して配置
+- **claude.ai / Claude Desktop**: Settings > Capabilities からアップロード（要 Pro 以上のプランおよびネットワーク許可。許可ドメインに `kokkai.ndl.go.jp` の追加が必要）
+- **OpenAI Codex**: `~/.agents/skills/` 直下に展開後の `jp-diet-minutes` フォルダを配置
 
 各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。
 
@@ -45,7 +45,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 | Meeting list / 会議一覧 | `GET /api/meeting_list` | 会議メタのみの軽量索引（最大 100 件/req） |
 | Meeting full transcript / 会議全文 | `GET /api/meeting` | 会議全発言の取得（最大 10 件/req、サイズ大） |
 
-Supported agents / 対応エージェント: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), GitHub Copilot (Copilot CLI), Cursor, Cline, Claude Desktop / claude.ai, ChatGPT Desktop, Goose, Gemini CLI, Google Antigravity, and any other [Agent Skills](https://agentskills.io)-compatible runtime.
+Supported agents / 対応エージェント: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), GitHub Copilot (Copilot CLI), Cursor, Cline, claude.ai / Claude Desktop (Custom Skills), OpenAI Codex, Goose, Gemini CLI, Google Antigravity, and any other [Agent Skills](https://agentskills.io)-compatible runtime.
 
 ## 依存
 
@@ -54,26 +54,12 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 | エージェント | 推奨フェッチ手段 |
 | --- | --- |
 | Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
-| Claude Desktop / Cursor / Cline / ChatGPT Desktop | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはシェル実行 |
+| claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要 Pro 以上のプラン + ネットワーク許可: `kokkai.ndl.go.jp`） |
+| GitHub Copilot CLI / Cursor / Cline / OpenAI Codex / Goose / Gemini CLI | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはエージェントのシェル実行機能 |
 | その他 | 任意の HTTP クライアント |
 
-### Windows ユーザー向け注意
-
-`mcp-server-fetch` を Windows で使う場合、文字化け対策に `PYTHONIOENCODING=utf-8` の設定が必要です。設定例:
-
-```json
-{
-  "mcpServers": {
-    "fetch": {
-      "command": "uvx",
-      "args": ["mcp-server-fetch"],
-      "env": {
-        "PYTHONIOENCODING": "utf-8"
-      }
-    }
-  }
-}
-```
+> [!NOTE]
+> `mcp-server-fetch` を Windows で使う場合の文字化け対策（`PYTHONIOENCODING=utf-8`）や Git Bash / WSL 利用等の詳細については [docs/install.md#windows-環境での利用注意mcp-server-fetch](docs/install.md#windows-環境での利用注意mcp-server-fetch) を参照してください。
 
 ## 国会会議録 API
 
