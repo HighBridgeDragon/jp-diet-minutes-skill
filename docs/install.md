@@ -61,7 +61,7 @@ Block 主導のオープンソースエージェント Goose は [Agent Skills �
 
 HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作します。
 
-| エージェント | 推奨フェッチ手段 |
+| エージェント | 代表的なフェッチ手段の例（目安） |
 | --- | --- |
 | Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
 | claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要 Pro 以上のプラン + ネットワーク許可: `kokkai.ndl.go.jp`） |
@@ -90,7 +90,7 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 }
 ```
 
-また、同梱の bash スクリプトを Windows で直接実行する場合は、Git for Windows 付属の Git Bash または WSL を利用してください。
+また、同梱の bash スクリプトを Windows 環境で直接実行する場合は、Git for Windows 付属の Git Bash や WSL 等の bash 実行環境をご利用ください。
 
 ## 利用上の注意
 
