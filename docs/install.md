@@ -22,7 +22,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 2. Settings > Capabilities を開き、`jp-diet-minutes.zip` をアップロードします。
 
 > [!IMPORTANT]
-> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** で取得した zip は、展開時のルートが `jp-diet-minutes-skill-main/`（直下に `jp-diet-minutes/`）になり `SKILL.md` が直下に来ないため、skill として認識されません。
+> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** や Releases の **Source code (zip)** で取得した zip は、展開時のルートが `jp-diet-minutes-skill-<ref>/`（直下に `jp-diet-minutes/`）になり `SKILL.md` が直下に来ないため、skill として認識されません。
 
 Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
 
