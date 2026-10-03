@@ -22,7 +22,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 2. Settings > Capabilities を開き、`jp-diet-minutes.zip` をアップロードします。
 
 > [!IMPORTANT]
-> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** で取得した zip にはリポジトリ全体（ドキュメントやワークフロー等）が含まれており、スキル構造と異なるため利用できません。
+> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** で取得した zip は、展開時のルートが `jp-diet-minutes-skill-main/`（直下に `jp-diet-minutes/`）になり `SKILL.md` が直下に来ないため、skill として認識されません。
 
 Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
 
@@ -32,7 +32,6 @@ zip を導入しても、以下を満たさない環境では動作しません�
 
 - **プラン**: Pro / Max / Team / Enterprise のいずれかであること。
 - **コード実行**: 有効になっていること。本スキルは同梱の bash スクリプトから API を呼び出します。
-- **`jq`**: 推奨です。`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
 - **ネットワークアクセス**: サンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワーク設定でブロックされる場合は、許可ドメインに `kokkai.ndl.go.jp` を追加する必要があります（これを満たせない環境では Claude Code 経由をご利用ください）。
 - **Claude API 経由**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
 
@@ -68,6 +67,10 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 | claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要 Pro 以上のプラン + ネットワーク許可: `kokkai.ndl.go.jp`） |
 | GitHub Copilot CLI / Cursor / Cline / OpenAI Codex / Goose / Gemini CLI | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはエージェントのシェル実行機能 |
 | その他 | 任意の HTTP クライアント |
+
+### `jq` コマンドについて（推奨）
+
+スクリプト利用時、`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
 
 ### Windows 環境での利用注意（mcp-server-fetch）
 
