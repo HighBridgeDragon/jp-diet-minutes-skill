@@ -19,10 +19,10 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 ### claude.ai / Claude Desktop
 
 1. [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードします。
-2. Settings > Features（または Capabilities）を開き、`jp-diet-minutes.zip` をアップロードします。
+2. Settings > Capabilities を開き、`jp-diet-minutes.zip` をアップロードします。
 
 > [!IMPORTANT]
-> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** で取得した zip は、展開時のルートが `jp-diet-minutes-skill-main/` になり `SKILL.md` が直下に来ないため、skill として認識されません。
+> アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** で取得した zip にはリポジトリ全体（ドキュメントやワークフロー等）が含まれており、スキル構造と異なるため利用できません。
 
 Custom Skill は面をまたいで同期しません。Claude Code に導入済みでも、claude.ai では別途アップロードが必要です。
 
@@ -36,17 +36,22 @@ zip を導入しても、以下を満たさない環境では動作しません�
 - **ネットワークアクセス**: サンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai のネットワーク設定でブロックされる場合は、許可ドメインに `kokkai.ndl.go.jp` を追加する必要があります（これを満たせない環境では Claude Code 経由をご利用ください）。
 - **Claude API 経由**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
 
-### ChatGPT Desktop
+### OpenAI Codex
+
+[OpenAI Codex のスキル仕様](https://developers.openai.com/codex/skills/) に準拠した配置手順です。
 
 1. [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして展開します。
-2. 展開したフォルダを、ユーザー共通スキルディレクトリ（`~/.agents/skills/jp-diet-minutes`）または作業プロジェクトの `.agents/skills/jp-diet-minutes` に配置します。
-3. ChatGPT Desktop アプリのサイドバーにある「Skills」から本スキルが認識され、チャット上で利用可能になります。
+2. 展開された `jp-diet-minutes` フォルダ（直下に `SKILL.md` があるフォルダ）を、ユーザー共通スキルディレクトリ（`~/.agents/skills/` 直下）またはプロジェクトの `.agents/skills/` 直下に配置します（配置後のパス: `~/.agents/skills/jp-diet-minutes/SKILL.md`。二重フォルダ `jp-diet-minutes/jp-diet-minutes/` にならないようご注意ください）。
 
-### Goose Desktop
+> [!NOTE]
+> 上記の配置パスは OpenAI Codex 公式ドキュメントに基づく仕様です。ChatGPT Desktop 等におけるローカルスキルの読み込み仕様や対応状況については、OpenAI の公式アナウンスをご確認ください。
+
+### Goose
+
+Block 主導のオープンソースエージェント Goose は [Agent Skills オープン標準](https://agentskills.io/clients) に対応しています。
 
 1. [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして展開します。
-2. `~/.agents/skills/jp-diet-minutes` に配置します。
-3. Goose Desktop を起動すると自動認識されます。
+2. スキルの配置先や読み込み方法については、[Goose 公式ドキュメント](https://block.github.io/goose/) の指示に従ってください。なお、同梱スクリプトを実行できるシェル環境が必要です。
 
 ### Google Gemini についての注意
 
@@ -60,10 +65,11 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 | エージェント | 推奨フェッチ手段 |
 | --- | --- |
 | Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
-| Claude Desktop / Cursor / Cline / ChatGPT Desktop | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはシェル実行 |
+| claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要 Pro 以上のプラン + ネットワーク許可: `kokkai.ndl.go.jp`） |
+| GitHub Copilot CLI / Cursor / Cline / OpenAI Codex / Goose / Gemini CLI | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはエージェントのシェル実行機能 |
 | その他 | 任意の HTTP クライアント |
 
-### Windows ユーザー向け注意（`mcp-server-fetch`）
+### Windows 環境での利用注意（mcp-server-fetch）
 
 `mcp-server-fetch` を Windows で使う場合、文字化け対策に `PYTHONIOENCODING=utf-8` の設定が必要です。設定例:
 
@@ -81,6 +87,8 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 }
 ```
 
+また、同梱の bash スクリプトを Windows で直接実行する場合は、Git for Windows 付属の Git Bash または WSL を利用してください。
+
 ## 利用上の注意
 
 国会会議録検索システム API は、機械的アクセスにあたって多重リクエストを禁じ、数秒の間隔を空けることを求めています。本スキルはこの制約を SKILL.md の記述で守る設計です。スクリプトを直接繰り返し呼び出す場合は、呼び出し間隔にご注意ください。
@@ -90,5 +98,6 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 - [Agent Skills (agentskills.io)](https://agentskills.io)
 - [Agent Skills Overview (Anthropic)](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
 - [How to create custom Skills (Claude Help)](https://support.claude.com/en/articles/12512198-creating-custom-skills)
-- [Build skills (OpenAI ChatGPT & Codex)](https://learn.chatgpt.com/docs/build-skills)
+- [Build skills (OpenAI Codex)](https://developers.openai.com/codex/skills/)
+- [Goose (Block)](https://block.github.io/goose/)
 - [国会会議録検索システム API 仕様](https://kokkai.ndl.go.jp/api.html)
