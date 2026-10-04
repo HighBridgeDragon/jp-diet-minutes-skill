@@ -1,16 +1,16 @@
 ---
 name: jp-diet-minutes
-description: Search and retrieve Japanese National Diet (国会) meeting minutes via the official NDL Kokkai API (no auth required). Covers all Diet sessions since 1947, supports keyword search, speaker lookup, meeting-level retrieval, and date/session/issue filtering. Useful for political research, legislative tracking, speech analysis, and any task involving Japanese parliamentary records. 国会発足（1947 年）以降の日本の国会議事録を NDL 国会会議録検索システム API 経由で検索・取得するスキル。発言・会議・キーワード検索および期間/回次/会派による絞り込みに対応。Use this skill when researching Japanese Diet debates, MP statements, or parliamentary records.
+description: Search and retrieve Japanese National Diet (国会) meeting minutes via the official NDL Kokkai API (no auth required). Covers all Diet sessions since 1947, supports keyword search, speaker lookup, meeting-level retrieval, and date/session/issue filtering. Useful for political research, legislative tracking, speech analysis, and any task involving Japanese parliamentary records. 国会発足（1947 年）以降の日本の国会議事録を NDL 国会会議録検索システム API 経由で検索・取得するスキル。発言・会議・キーワード検索および期間/回次/会派による絞り込みに対応。Use this skill when researching Japanese Diet debates, MP statements, or parliamentary records. Not for the Imperial Diet (帝国議会・貴族院, before 1947-05), which is served by the separate NDL Imperial Diet API.
 license: MIT
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # 国会会議録検索スキル
 
 NDL（国立国会図書館）の国会会議録検索システム API 経由で国会発足（1947 年）以降の日本の国会議事録を調査する。認証不要。`bash scripts/<script>.sh` wrapper を使って呼び出す。
 
-帝国議会会議録（〜1947 年）は別 API のため対象外。
+第 1〜92 回帝国議会（1890-11-29〜1947-03-31）および貴族院は別 API のため対象外。国会は日本国憲法施行後の 1947-05-03 以降（第 1 回国会〜）。
 
 ## 基本ルール
 
