@@ -1,0 +1,24 @@
+jp-diet-minutes/SKILL.md
+  s_876bc501c3e4e1::t_54bb4ab2adb7e7 3,6,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e7e0cf2a7fd544f9b19bba40a79ab9269de8d375",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_876bc501c3e4e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c798d44-bb71-45a7-9680-1e8137a0b6cb",
+        "model": "unknown"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
