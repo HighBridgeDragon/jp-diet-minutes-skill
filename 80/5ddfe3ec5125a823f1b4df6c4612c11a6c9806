@@ -1,0 +1,16 @@
+.gitattributes
+  h_f91a6a8a277de2 8-9
+docs/install.md
+  h_f91a6a8a277de2 33-35,52,72,96,102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "805ddfe3ec5125a823f1b4df6c4612c11a6c9806",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
