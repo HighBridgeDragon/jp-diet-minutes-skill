@@ -1,0 +1,16 @@
+.github/release-notes.md
+  h_f91a6a8a277de2 15,25-26,38-39
+docs/install.md
+  h_f91a6a8a277de2 22,27,33,35,67,104-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f9652da431365fad590f01f3cb724f8273ebe14c",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
