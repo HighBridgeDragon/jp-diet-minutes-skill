@@ -19,7 +19,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 ### claude.ai / Claude Desktop
 
 1. [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードします。
-2. Customize > Skills を開き、「+」→「+ Create skill」→「Upload a skill」の順に選んで `jp-diet-minutes.zip` をアップロードします。
+2. claude.ai の Skills 設定から `jp-diet-minutes.zip` をアップロードします（最新の画面操作手順は公式ヘルプ [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude) を参照）。
 
 > [!IMPORTANT]
 > アップロードできるのは **Releases に添付された `jp-diet-minutes.zip`** だけです。GitHub リポジトリ画面の **Code > Download ZIP** や Releases の **Source code (zip)** で取得した zip は、展開時のルートが `jp-diet-minutes-skill-<ref>/`（直下に `jp-diet-minutes/`）になり `SKILL.md` が直下に来ないため、skill として認識されません。
@@ -30,9 +30,8 @@ Custom Skill は claude.ai・Claude API・Claude Code の間で同期しませ�
 
 zip を導入しても、以下を満たさない環境では動作しません。
 
-- **プラン**: Free / Pro / Max / Team / Enterprise のいずれかであること（スキルのアップロード自体は全プランで可能ですが、国会会議録 API の利用には後述のとおり Team / Enterprise の組織オーナーによる許可ドメイン追加が必要です）。
-- **コード実行**: 有効になっていること。本スキルは同梱の bash スクリプトから API を呼び出します。
-- **ネットワークアクセス**: サンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai の既定の許可ドメインはパッケージマネージャー等に限られ、`kokkai.ndl.go.jp` は含まれません（公式ヘルプ [Create and edit files with Claude の「Approved network domains」節](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude#h_1010adf0ee)）。Team / Enterprise では、組織オーナーが Organization settings > Capabilities で許可ドメインに `kokkai.ndl.go.jp` を追加する必要があります。個人プラン（Free / Pro / Max）には許可ドメインを追加する設定が無いため、Claude Code 経由をご利用ください。
+- **コード実行**: 有効になっていること（対象プランや要件の詳細は公式ヘルプ [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude) を参照）。本スキルは同梱の bash スクリプトから API を呼び出します。
+- **ネットワークアクセス**: サンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai では既定で外部ドメインへの通信が制限されているため、組織管理者による許可ドメインへの追加が必要です（許可ドメインの設定方法や対象プランの詳細は公式ヘルプ [Create and edit files with Claude の「Approved network domains」節](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude#h_1010adf0ee) を参照）。許可ドメインを追加できない環境では、Claude Code 経由をご利用ください。
 - **Claude API 経由**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
 
 ### OpenAI Codex
@@ -64,7 +63,7 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 | エージェント | 代表的なフェッチ手段の例（目安） |
 | --- | --- |
 | Claude Code | 標準同梱の `WebFetch`（追加セットアップ不要） |
-| claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（コード実行の有効化が必要。`kokkai.ndl.go.jp` は既定の許可ドメインに含まれないため Team / Enterprise の組織オーナーによる追加が必要） |
+| claude.ai / Claude Desktop | Custom Skills サンドボックスのコード実行（要コード実行および許可ドメイン追加。詳細は[動作条件](#動作条件claudeai--claude-desktop)を参照） |
 | GitHub Copilot CLI / Cursor / Cline / OpenAI Codex / Goose / Gemini CLI | [`mcp-server-fetch`](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)（公式 MCP サーバ）またはエージェントのシェル実行機能 |
 | その他 | 任意の HTTP クライアント |
 
