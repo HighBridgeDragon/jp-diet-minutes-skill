@@ -20,7 +20,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして導入します。
 
-- **claude.ai / Claude Desktop**: Customize > Skills からアップロード（コード実行の有効化が必要。`kokkai.ndl.go.jp` は既定の許可ドメインに含まれないため、Team / Enterprise の組織オーナーによる許可ドメインへの追加が必要。個人プランには追加の設定が無いため Claude Code 経由をご利用ください）
+- **claude.ai / Claude Desktop**: Skills 設定からアップロード（コード実行の有効化および許可ドメインへの追加が必要。設定手順や条件は [docs/install.md](docs/install.md) を参照。追加できない環境では Claude Code 経由をご利用ください）
 - **OpenAI Codex**: `~/.agents/skills/` 直下に展開後の `jp-diet-minutes` フォルダを配置
 
 各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。なお、Web 版 Gemini（gemini.google.com）はスクリプト実行機構を持たないため非対応です（Gemini CLI / Google Antigravity 推奨）。
