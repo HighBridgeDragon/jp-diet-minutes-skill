@@ -30,9 +30,9 @@ Custom Skill は claude.ai・Claude API・Claude Code の間で同期しませ�
 
 zip を導入しても、以下を満たさない環境では動作しません。
 
-- **コード実行**: 有効になっていること（対象プランや要件の詳細は公式ヘルプ [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude) を参照）。本スキルは同梱の bash スクリプトから API を呼び出します。
-- **ネットワークアクセス**: サンドボックスから `kokkai.ndl.go.jp` へ到達できること。claude.ai では既定で外部ドメインへの通信が制限されているため、組織管理者による許可ドメインへの追加が必要です（許可ドメインの設定方法や対象プランの詳細は公式ヘルプ [Create and edit files with Claude の「Approved network domains」節](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude#h_1010adf0ee) を参照）。許可ドメインを追加できない環境では、Claude Code 経由をご利用ください。
-- **Claude API 経由**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に国会会議録 API を呼び出せません。
+- **コード実行**: 有効になっていること（対象プランや要件の詳細は公式ヘルプ [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude) を参照）。本スキルは同梱スクリプトまたは HTTP フェッチにより API を呼び出します。
+- **ネットワークアクセス**: サンドボックスから対象サービスへ到達できること。claude.ai では既定で外部ドメインへの通信が制限されているため、組織管理者による許可ドメインへの追加が必要です（許可ドメインの設定方法や対象プランの詳細は公式ヘルプ [Create and edit files with Claude の「Approved network domains」節](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude#h_1010adf0ee) を参照）。許可ドメインを追加できない環境では、Claude Code 経由をご利用ください。
+- **Claude API 経由**: API の Skills サンドボックスはネットワークアクセスを持たないため、原理的に外部 API を呼び出せません。
 
 ### OpenAI Codex
 
@@ -49,7 +49,7 @@ zip を導入しても、以下を満たさない環境では動作しません�
 Block 主導のオープンソースエージェント Goose は [Agent Skills オープン標準](https://agentskills.io/clients) に対応しています。
 
 1. [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして展開します。
-2. スキルの配置先や読み込み方法については、[Goose 公式ドキュメント](https://block.github.io/goose/) の指示に従ってください。なお、同梱スクリプトを実行できるシェル環境が必要です。
+2. スキルの配置先や読み込み方法については、[Goose 公式ドキュメント](https://block.github.io/goose/) の指示に従ってください。なお、同梱スクリプトまたは HTTP 呼び出しを実行できるシェル環境が必要です。
 
 ### Google Gemini についての注意
 
@@ -69,7 +69,7 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 
 ### `jq` コマンドについて（推奨）
 
-スクリプト利用時、`list-meetings.sh` / `search-by-*.sh` の `--sort`（クライアント側ソート）に使います。`jq` が無い環境では `--sort` を省略すると API 既定順（会議開催日降順）の raw JSON をそのまま返し、`--sort` を指定するとエラー終了します。
+スクリプト利用時、クライアント側での JSON ソートやフィルタリングに使用します。`jq` が無い環境ではソートや整形を行わず raw JSON を扱うか、スクリプトのオプションを省略してください。
 
 ### Windows 環境での利用注意（mcp-server-fetch）
 
@@ -93,15 +93,14 @@ HTTPS GET でアクセスできるフェッチツールが 1 つあれば動作�
 
 ## 利用上の注意
 
-国会会議録検索システム API は、機械的アクセスにあたって多重リクエストを禁じ、数秒の間隔を空けることを求めています。本スキルはこの制約を SKILL.md の記述で守る設計です。スクリプトを直接繰り返し呼び出す場合は、呼び出し間隔にご注意ください。
+対象外部 API サービスへの機械的アクセスにあたっては、各サービスの利用規約やアクセス制約（短時間の多重リクエスト制限など）に従ってください。本スキルはこの制約を SKILL.md の記述で守る設計です。スクリプトやリクエストを直接繰り返し呼び出す場合は、呼び出し間隔にご注意ください。
 
 ## 出典
 
 - [Agent Skills (agentskills.io)](https://agentskills.io)
 - [Agent Skills Overview (Anthropic)](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
-- [How to create custom Skills (Claude Help)](https://support.claude.com/en/articles/12512198-creating-custom-skills)
+- [How to create custom Skills (Claude Help)](https://support.claude.com/en/articles/12512180-using-skills-in-claude)
 - [Using Skills in Claude (Claude Help)](https://support.claude.com/en/articles/12512180-using-skills-in-claude)
 - [Create and edit files with Claude (Claude Help)](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude)
 - [Build skills (OpenAI Codex)](https://developers.openai.com/codex/skills/)
 - [Goose (Block)](https://block.github.io/goose/)
-- [国会会議録検索システム API 仕様](https://kokkai.ndl.go.jp/api.html)
