@@ -20,7 +20,7 @@ npx skills add HighBridgeDragon/jp-diet-minutes-skill
 
 [Releases](https://github.com/HighBridgeDragon/jp-diet-minutes-skill/releases) から `jp-diet-minutes.zip` をダウンロードして導入します。
 
-- **claude.ai / Claude Desktop**: Customize > Skills からアップロード（コード実行の有効化が必要。`kokkai.ndl.go.jp` は既定の許可ドメインに含まれないため、Team / Enterprise の組織オーナーによる許可ドメインへの追加が必要。個人プランには追加の設定が無い）
+- **claude.ai / Claude Desktop**: Customize > Skills からアップロード（コード実行の有効化が必要。`kokkai.ndl.go.jp` は既定の許可ドメインに含まれないため、Team / Enterprise の組織オーナーによる許可ドメインへの追加が必要。個人プランには追加の設定が無いため Claude Code 経由をご利用ください）
 - **OpenAI Codex**: `~/.agents/skills/` 直下に展開後の `jp-diet-minutes` フォルダを配置
 
 各クライアント別の詳細な導入手順や動作条件（ネットワーク設定・フェッチ環境等）は [docs/install.md](docs/install.md) を参照してください。なお、Web 版 Gemini（gemini.google.com）はスクリプト実行機構を持たないため非対応です（Gemini CLI / Google Antigravity 推奨）。
@@ -60,7 +60,7 @@ HTTPS GET でアクセスできるフェッチツール（Claude Code の `WebFe
 ### 対象範囲
 
 - ✅ **国会会議録**（1947 年〜現在、国会発足以降）: 衆議院・参議院・両院・両院協議会の会議録
-- ❌ **帝国議会会議録**（1890-11-29〜1947-03-31、第 1〜92 回帝国議会および貴族院）: 別 API のため対象外。帝国議会期の議事録は姉妹スキル [jp-imperial-diet-minutes-skill](https://github.com/HighBridgeDragon/jp-imperial-diet-minutes-skill) を利用してください。
+- ❌ **帝国議会会議録**（1890-11-29〜1947-03-31、第 1〜92 回帝国議会、貴族院を含む）: 別 API のため対象外。帝国議会期の議事録は姉妹スキル [jp-imperial-diet-minutes-skill](https://github.com/HighBridgeDragon/jp-imperial-diet-minutes-skill) を利用してください。
 
 ## 関連スキル
 
