@@ -60,7 +60,7 @@ HTTPS GET でアクセスできるフェッチツール（Claude Code の `WebFe
 ### 対象範囲
 
 - ✅ **国会会議録**（1947 年〜現在、国会発足以降）: 衆議院・参議院・両院・両院協議会の会議録
-- ❌ **帝国議会会議録**（1890-11-29〜1947-03-31、第 1〜92 回帝国議会、貴族院を含む）: 別 API のため対象外。帝国議会期の議事録は姉妹スキル [jp-imperial-diet-minutes-skill](https://github.com/HighBridgeDragon/jp-imperial-diet-minutes-skill) を利用してください。
+- ❌ **帝国議会会議録**（1890-11-29〜1947-03-31、第 1〜92 回帝国議会（貴族院を含む））: 別 API のため対象外。帝国議会期の議事録は姉妹スキル [jp-imperial-diet-minutes-skill](https://github.com/HighBridgeDragon/jp-imperial-diet-minutes-skill) を利用してください。
 
 ## 関連スキル
 
